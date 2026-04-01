@@ -178,7 +178,7 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 .section-title .sec-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 .sec-icon.arabic { background: linear-gradient(135deg, #e3f0fa, #c8e0f5); }
 .sec-icon.science { background: linear-gradient(135deg, #e8f7f0, #cceedd); }
-.sec-icon.unnamed { background: linear-gradient(135deg, #f5f0fa, #ded4f5); }
+.sec-icon.math { background: linear-gradient(135deg, #fff4e6, #ffe0b2); }
 .questions-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
 .q-card {
   background: var(--surface);
@@ -198,12 +198,12 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 }
 .q-num { width: 36px; height: 36px; border-radius: 10px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 0.95rem; flex-shrink: 0; margin-top: 0.1rem; }
 .q-text { font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text); flex: 1; line-height: 1.6; }
-.q-text.unnamed-q { color: var(--text-2); font-style: italic; }
+.q-text.math-q { color: var(--text-2); font-style: italic; }
 .q-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
 .q-tag { padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
 .q-tag.subj-arabic { background: #e3f0fa; color: var(--primary); }
 .q-tag.subj-science { background: #e8f7f0; color: var(--success); }
-.q-tag.subj-unnamed { background: #f5f0fa; color: #6c4dbf; }
+.q-tag.subj-math { background: #fff4e6; color: #e07b39; }
 .q-body { padding: 1.25rem 1.5rem; }
 .difficulty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
 .diff-label { font-size: 0.88rem; color: var(--text-2); font-weight: 700; white-space: nowrap; }
@@ -340,7 +340,7 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
     <span class="subject-filter-label">تصفية حسب المادة:</span>
     <button class="subject-btn active" onclick="filterSubject('all')" id="sbtn-all">الكل</button>
     <button class="subject-btn" onclick="filterSubject('arabic')" id="sbtn-arabic">اللغة العربية</button>
-    <button class="subject-btn" onclick="filterSubject('unnamed')" id="sbtn-unnamed">أسئلة بدون نص</button>
+    <button class="subject-btn" onclick="filterSubject('math')" id="sbtn-math">الرياضيات</button>
     <button class="subject-btn" onclick="filterSubject('science')" id="sbtn-science">العلوم</button>
   </div>
 
@@ -379,13 +379,14 @@ function getDiffColor(pct) {
 function getSubjectLabel(s) {
   if (s === 'arabic') return 'اللغة العربية';
   if (s === 'science') return 'العلوم';
-  return 'سؤال بدون نص';
+  if (s === 'math') return 'الرياضيات';
+  return 'الرياضيات';
 }
 
 function getSubjectTagCls(s) {
   if (s === 'arabic') return 'q-tag subj-arabic';
   if (s === 'science') return 'q-tag subj-science';
-  return 'q-tag subj-unnamed';
+  return 'q-tag subj-math';
 }
 
 function switchGrade(grade) {
@@ -497,10 +498,10 @@ function renderCharts() {
   });
   
   // Difficulty by subject
-  const subjects = ['arabic', 'unnamed', 'science'];
-  const subjLabels = ['اللغة العربية', 'أسئلة بدون نص', 'العلوم'];
+  const subjects = ['arabic', 'math', 'science'];
+  const subjLabels = ['اللغة العربية', 'الرياضيات', 'العلوم'];
   const subjDiffs = subjects.map(s => {
-    const qs = d.questions.filter(q => q.subject === s);
+    const qs = d.questions.filter(q => q.subject === s || (s === 'math' && q.subject === 'unnamed'));
     return qs.length ? (qs.reduce((sum, q) => sum + q.difficulty, 0) / qs.length).toFixed(1) : 0;
   });
   
@@ -514,12 +515,12 @@ function renderCharts() {
         data: subjDiffs,
         backgroundColor: [
           'rgba(30,95,138,0.7)',
-          'rgba(108,77,191,0.7)',
+          'rgba(224,123,57,0.7)',
           'rgba(39,160,98,0.7)',
         ],
         borderColor: [
           'rgba(30,95,138,0.9)',
-          'rgba(108,77,191,0.9)',
+          'rgba(224,123,57,0.9)',
           'rgba(39,160,98,0.9)',
         ],
         borderWidth: 1,
@@ -546,16 +547,20 @@ function renderCharts() {
 
 function renderOverviewTable() {
   const d = ALL_DATA[currentGrade];
-  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => q.subject === currentSubject);
+  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => {
+    const key = (q.subject === 'unnamed') ? 'math' : q.subject;
+    return key === currentSubject;
+  });
   
   const rows = questions.map(q => {
     const lvl = getDiffLevel(q.difficulty);
     const color = getDiffColor(q.difficulty);
-    const shortQ = q.is_named ? (q.question.length > 55 ? q.question.substring(0, 55) + '…' : q.question) : q.question;
+    const subj = (q.subject === 'unnamed') ? 'math' : q.subject;
+    const shortQ = q.is_named ? (q.question.length > 55 ? q.question.substring(0, 55) + '…' : q.question) : ('رياضيات - سؤال ' + q.index);
     return `<tr>
       <td><span class="q-num-badge">${q.index}</span></td>
       <td style="max-width:300px;font-size:0.88rem;">${shortQ}</td>
-      <td><span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span></td>
+      <td><span class="${getSubjectTagCls(subj)}">${getSubjectLabel(subj)}</span></td>
       <td>${q.total}</td>
       <td>
         <div style="display:flex;align-items:center;gap:0.6rem;">
@@ -575,16 +580,22 @@ function renderOverviewTable() {
 
 function renderQuestions() {
   const d = ALL_DATA[currentGrade];
-  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => q.subject === currentSubject);
-  
-  const sections = {arabic: [], unnamed: [], science: []};
-  questions.forEach(q => sections[q.subject].push(q));
-  
+  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => {
+    const key = (q.subject === 'unnamed') ? 'math' : q.subject;
+    return currentSubject === 'all' || key === currentSubject;
+  });
+
+  const sections = {arabic: [], math: [], science: []};
+  questions.forEach(q => {
+    const key = (q.subject === 'unnamed') ? 'math' : q.subject;
+    sections[key].push(q);
+  });
+
   let html = '';
-  
+
   const secDefs = [
     {key: 'arabic', title: 'اللغة العربية', icon: 'arabic', emoji: '📖'},
-    {key: 'unnamed', title: 'أسئلة بدون نص (صور)', icon: 'unnamed', emoji: '🖼️'},
+    {key: 'math', title: 'الرياضيات', icon: 'math', emoji: '🔢'},
     {key: 'science', title: 'العلوم', icon: 'science', emoji: '🔬'},
   ];
   
@@ -603,7 +614,7 @@ function renderQuestions() {
         <div class="q-header">
           <div class="q-num">${q.index}</div>
           <div style="flex:1;">
-            <div class="q-text ${q.is_named ? '' : 'unnamed-q'}">${q.is_named ? q.question : '🖼️ سؤال يحتوي على صورة أو جدول — رقم السؤال: ' + q.index}</div>
+            <div class="q-text ${q.is_named ? '' : 'math-q'}">${q.is_named ? q.question : '🔢 سؤال رياضيات يحتوي على صورة أو جدول — رقم السؤال: ' + q.index}</div>
             <div class="q-meta">
               <span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span>
               <span class="diff-tag ${lvl.cls}">${lvl.label}: ${q.difficulty}%</span>
