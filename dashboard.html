@@ -340,7 +340,7 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
     <span class="subject-filter-label">تصفية حسب المادة:</span>
     <button class="subject-btn active" onclick="filterSubject('all')" id="sbtn-all">الكل</button>
     <button class="subject-btn" onclick="filterSubject('arabic')" id="sbtn-arabic">اللغة العربية</button>
-    <button class="subject-btn" onclick="filterSubject('unnamed')" id="sbtn-unnamed">أسئلة بدون نص</button>
+    <button class="subject-btn" onclick="filterSubject('unnamed')" id="sbtn-unnamed">الرياضيات</button>
     <button class="subject-btn" onclick="filterSubject('science')" id="sbtn-science">العلوم</button>
   </div>
 
@@ -379,7 +379,7 @@ function getDiffColor(pct) {
 function getSubjectLabel(s) {
   if (s === 'arabic') return 'اللغة العربية';
   if (s === 'science') return 'العلوم';
-  return 'سؤال بدون نص';
+  return 'الرياضيات';
 }
 
 function getSubjectTagCls(s) {
@@ -498,7 +498,7 @@ function renderCharts() {
   
   // Difficulty by subject
   const subjects = ['arabic', 'unnamed', 'science'];
-  const subjLabels = ['اللغة العربية', 'أسئلة بدون نص', 'العلوم'];
+  const subjLabels = ['اللغة العربية', 'الرياضيات', 'العلوم'];
   const subjDiffs = subjects.map(s => {
     const qs = d.questions.filter(q => q.subject === s);
     return qs.length ? (qs.reduce((sum, q) => sum + q.difficulty, 0) / qs.length).toFixed(1) : 0;
@@ -584,7 +584,7 @@ function renderQuestions() {
   
   const secDefs = [
     {key: 'arabic', title: 'اللغة العربية', icon: 'arabic', emoji: '📖'},
-    {key: 'unnamed', title: 'أسئلة بدون نص (صور)', icon: 'unnamed', emoji: '🖼️'},
+    {key: 'unnamed', title: 'الرياضيات', icon: 'unnamed', emoji: '📐'},
     {key: 'science', title: 'العلوم', icon: 'science', emoji: '🔬'},
   ];
   
@@ -603,7 +603,7 @@ function renderQuestions() {
         <div class="q-header">
           <div class="q-num">${q.index}</div>
           <div style="flex:1;">
-            <div class="q-text ${q.is_named ? '' : 'unnamed-q'}">${q.is_named ? q.question : '🖼️ سؤال يحتوي على صورة أو جدول — رقم السؤال: ' + q.index}</div>
+            <div class="q-text ${q.is_named ? '' : 'unnamed-q'}">${q.is_named ? q.question : '📐 سؤال رياضيات — رقم السؤال: ' + q.index}</div>
             <div class="q-meta">
               <span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span>
               <span class="diff-tag ${lvl.cls}">${lvl.label}: ${q.difficulty}%</span>
