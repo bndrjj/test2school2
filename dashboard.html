@@ -6,6 +6,7 @@
 <title>لوحة تحليل الاختبارات التشخيصية - الصف السادس والثالث المتوسط</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 :root {
   --primary: #1e5f8a;
@@ -99,6 +100,98 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
   box-shadow: 0 4px 16px rgba(30,95,138,0.25);
 }
 .grade-tab:not(.active):hover { background: var(--surface-2); color: var(--primary); }
+
+/* ===================== REPORT ACTIONS ===================== */
+.report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.action-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.72rem 1.25rem;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.action-btn:hover { transform: translateY(-1px); }
+.action-btn:disabled { opacity: 0.65; cursor: wait; }
+.action-btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(30,95,138,0.26);
+}
+.action-btn.accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(224,123,57,0.24);
+}
+
+/* ===================== PRINT REPORT ===================== */
+.print-report {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+.print-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.print-title { font-size: 1.25rem; font-weight: 800; color: var(--primary-dark); }
+.print-sub { color: var(--text-2); font-size: 0.92rem; }
+.print-date {
+  font-family: 'Cairo', sans-serif;
+  font-weight: 700;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.5rem 0.8rem;
+}
+.report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.report-summary-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem;
+}
+.report-summary-label { color: var(--text-3); font-size: 0.82rem; font-weight: 600; }
+.report-summary-value { color: var(--primary-dark); font-size: 1.15rem; font-weight: 800; font-family: 'Cairo', sans-serif; margin-top: 0.2rem; }
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.7rem;
+}
+.report-table th, .report-table td {
+  border: 1px solid rgba(30,95,138,0.14);
+  padding: 0.55rem 0.65rem;
+  text-align: right;
+  font-size: 0.86rem;
+}
+.report-table th { background: #eef4fa; color: var(--primary-dark); font-weight: 700; }
+.report-table td strong { color: var(--primary-dark); font-family: 'Cairo', sans-serif; }
+
+@media print {
+  body { background: #fff; }
+  .header, .grade-tabs, .kpi-grid, .charts-row, .overview-card, .subject-filter, .questions-section, .footer, .report-actions { display: none !important; }
+  .container { max-width: 100%; padding: 0; }
+  .print-report { box-shadow: none; border: 0; border-radius: 0; padding: 0; margin: 0; }
+}
 
 /* ===================== KPI CARDS ===================== */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
@@ -299,6 +392,34 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
     </button>
   </div>
 
+  <!-- REPORT ACTIONS -->
+  <div class="report-actions">
+    <button class="action-btn primary" onclick="printProfessionalReport()">🖨️ طباعة التقرير الاحترافي</button>
+    <button class="action-btn accent" onclick="exportReportPDF(event)">📄 تصدير PDF احترافي</button>
+  </div>
+
+  <!-- PROFESSIONAL PRINT REPORT -->
+  <div class="print-report" id="printReport">
+    <div class="print-head">
+      <div>
+        <div class="print-title">التقرير الاحترافي لنتائج الاختبار التشخيصي</div>
+        <div class="print-sub" id="printReportSub">—</div>
+      </div>
+      <div class="print-date" id="reportDate">—</div>
+    </div>
+    <div class="report-summary-grid" id="reportSummaryGrid"><!-- filled by JS --></div>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>المؤشر</th>
+          <th>التفصيل</th>
+          <th>القيمة</th>
+        </tr>
+      </thead>
+      <tbody id="reportHighlightsBody"><!-- filled by JS --></tbody>
+    </table>
+  </div>
+
   <!-- KPI CARDS -->
   <div class="kpi-grid" id="kpiGrid"><!-- filled by JS --></div>
 
@@ -407,10 +528,98 @@ function filterSubject(subj) {
 }
 
 function render() {
+  renderPrintReport();
   renderKPIs();
   renderCharts();
   renderOverviewTable();
   renderQuestions();
+}
+
+function getCurrentData() {
+  const d = ALL_DATA[currentGrade];
+  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => q.subject === currentSubject);
+  const avgDiff = questions.length ? (questions.reduce((s, q) => s + q.difficulty, 0) / questions.length) : 0;
+  const hardest = questions.length ? questions.reduce((a, b) => (a.difficulty < b.difficulty ? a : b)) : null;
+  const easiest = questions.length ? questions.reduce((a, b) => (a.difficulty > b.difficulty ? a : b)) : null;
+  return { d, questions, avgDiff, hardest, easiest };
+}
+
+function renderPrintReport() {
+  const { d, questions, avgDiff, hardest, easiest } = getCurrentData();
+  const subjectTxt = currentSubject === 'all' ? 'جميع المواد' : getSubjectLabel(currentSubject);
+  const reportDate = new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('reportDate').textContent = `تاريخ التقرير: ${reportDate}`;
+  document.getElementById('printReportSub').textContent = `${d.grade} • ${subjectTxt} • إجمالي البنود: ${questions.length}`;
+
+  document.getElementById('reportSummaryGrid').innerHTML = `
+    <div class="report-summary-item">
+      <div class="report-summary-label">إجمالي الطلاب</div>
+      <div class="report-summary-value">${d.total_students}</div>
+    </div>
+    <div class="report-summary-item">
+      <div class="report-summary-label">متوسط درجة الاختبار</div>
+      <div class="report-summary-value">${d.avg_score}/30</div>
+    </div>
+    <div class="report-summary-item">
+      <div class="report-summary-label">متوسط نسبة الصواب</div>
+      <div class="report-summary-value">${avgDiff.toFixed(1)}%</div>
+    </div>
+    <div class="report-summary-item">
+      <div class="report-summary-label">حالة الصعوبة العامة</div>
+      <div class="report-summary-value">${getDiffLevel(avgDiff).label}</div>
+    </div>
+  `;
+
+  document.getElementById('reportHighlightsBody').innerHTML = `
+    <tr>
+      <td><strong>أفضل أداء</strong></td>
+      <td>${easiest ? (easiest.is_named ? easiest.question : `سؤال ${easiest.index}`) : '—'}</td>
+      <td>${easiest ? easiest.difficulty + '%' : '—'}</td>
+    </tr>
+    <tr>
+      <td><strong>أكثر بند يحتاج تدخل</strong></td>
+      <td>${hardest ? (hardest.is_named ? hardest.question : `سؤال ${hardest.index}`) : '—'}</td>
+      <td>${hardest ? hardest.difficulty + '%' : '—'}</td>
+    </tr>
+    <tr>
+      <td><strong>التوصية التعليمية</strong></td>
+      <td>${avgDiff >= 75 ? 'الحفاظ على مستوى الإتقان مع التوسع في مهام عليا.' : avgDiff >= 45 ? 'تنفيذ دعم علاجي مركز للأسئلة المتوسطة الصعوبة.' : 'خطة علاج مكثفة وتدريس مفاهيم تأسيسية بشكل متدرج.'}</td>
+      <td>${getDiffLevel(avgDiff).label}</td>
+    </tr>
+  `;
+}
+
+function printProfessionalReport() {
+  window.print();
+}
+
+async function exportReportPDF(event) {
+  const btn = event?.currentTarget;
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري تجهيز ملف PDF...';
+  }
+  try {
+    renderPrintReport();
+    const { d } = getCurrentData();
+    const element = document.getElementById('printReport');
+    const options = {
+      margin: [8, 8, 8, 8],
+      filename: `تقرير-تشخيصي-${d.grade}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    await html2pdf().set(options).from(element).save();
+  } catch (error) {
+    alert('تعذر إنشاء ملف PDF حالياً. يرجى المحاولة مرة أخرى.');
+    console.error(error);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '📄 تصدير PDF احترافي';
+    }
+  }
 }
 
 function renderKPIs() {
