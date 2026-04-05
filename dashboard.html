@@ -518,6 +518,19 @@ body.pdf-export .signature-name { font-size: 0.82rem; margin-top: 0.12rem; }
 
 /* Hidden class */
 .hidden { display: none !important; }
+
+/* ---- PDF EXPORT BUTTON ---- */
+.export-btn {
+  display: inline-flex; align-items: center; gap: .55rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: #fff; border: none; padding: .65rem 1.4rem;
+  border-radius: 999px; font-family: 'Cairo', sans-serif;
+  font-size: .92rem; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(224,123,57,.4);
+  transition: all .2s; text-decoration: none;
+}
+.export-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(224,123,57,.55); }
+.export-btn svg { width: 18px; height: 18px; }
 </style>
 </head>
 <body>
@@ -538,8 +551,15 @@ body.pdf-export .signature-name { font-size: 0.82rem; margin-top: 0.12rem; }
           <span class="header-badge">📍 قطاع الخبر</span>
         </div>
       </div>
-      <div class="header-stats" id="headerStats">
-        <!-- filled by JS -->
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1rem;">
+        <div class="header-stats" id="headerStats"><!-- filled by JS --></div>
+        <a href="print-report.html" target="_blank" class="export-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/>
+          </svg>
+          تصدير PDF / طباعة
+        </a>
       </div>
     </div>
   </div>
