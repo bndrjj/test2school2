@@ -2,669 +2,496 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة تحليل الاختبارات التشخيصية - الصف السادس والثالث المتوسط</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>تقرير تحليل الاختبارات التشخيصية — قطاع الخبر 1446هـ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #1e5f8a;
-  --primary-light: #2d7db5;
-  --primary-dark: #154569;
-  --accent: #e07b39;
-  --accent-light: #f09552;
-  --success: #27a062;
-  --success-light: #e8f7f0;
-  --warning: #d68e1a;
-  --warning-light: #fef6e4;
-  --danger: #c0392b;
-  --danger-light: #fde8e6;
-  --bg: #f0f4f8;
-  --surface: #ffffff;
-  --surface-2: #f7fafd;
-  --border: rgba(30,95,138,0.12);
-  --text: #1a2332;
-  --text-2: #4a5568;
-  --text-3: #718096;
-  --shadow-sm: 0 2px 8px rgba(30,95,138,0.08);
-  --shadow: 0 8px 24px rgba(30,95,138,0.10);
-  --shadow-lg: 0 16px 48px rgba(30,95,138,0.14);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --radius-lg: 24px;
+:root{
+  --p:#1e5f8a;--pl:#2d7db5;--pd:#154569;
+  --acc:#e07b39;--ok:#27a062;--warn:#d68e1a;--err:#c0392b;
+  --bg:#f0f4f8;--surf:#fff;--bdr:rgba(30,95,138,.12);
+  --t:#1a2332;--t2:#4a5568;--t3:#718096;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Tajawal', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-  min-height: 100vh;
-}
-h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
-.container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--t);line-height:1.7;direction:rtl}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;line-height:1.3}
 
-/* ===================== HEADER ===================== */
-.header {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
-  border-radius: var(--radius-lg);
-  padding: 2rem 2.5rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-lg);
-  position: relative;
-  overflow: hidden;
+/* ---- ACTION BAR ---- */
+.action-bar{
+  position:sticky;top:0;z-index:999;
+  background:var(--pd);
+  padding:.9rem 2rem;
+  display:flex;align-items:center;gap:1rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
 }
-.header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -20%;
-  width: 60%;
-  height: 200%;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.07) 0%, transparent 70%);
-  pointer-events: none;
+.action-bar-title{font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;flex:1}
+.btn-pdf{
+  background:linear-gradient(135deg,var(--acc),#f09552);
+  color:#fff;border:none;padding:.65rem 1.5rem;border-radius:999px;
+  font-family:'Cairo',sans-serif;font-size:.95rem;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:.5rem;
+  box-shadow:0 4px 14px rgba(224,123,57,.4);transition:all .2s;
 }
-.header-inner { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: space-between; position: relative; }
-.header-logo-wrap img { height: 70px; width: auto; filter: brightness(0) invert(1); }
-.header-text { flex: 1; }
-.header-title { font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 800; color: #fff; margin-bottom: 0.35rem; }
-.header-subtitle { color: rgba(255,255,255,0.85); font-size: 1rem; font-weight: 400; }
-.header-badges { display: flex; gap: 0.7rem; margin-top: 0.8rem; flex-wrap: wrap; }
-.header-badge {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-  padding: 0.3rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
+.btn-pdf:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(224,123,57,.5)}
+.btn-back{
+  background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);
+  padding:.65rem 1.3rem;border-radius:999px;
+  font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:600;
+  cursor:pointer;transition:all .2s;
 }
-.header-stats { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.header-stat { text-align: center; }
-.header-stat-val { font-family: 'Cairo', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; line-height: 1; }
-.header-stat-lbl { font-size: 0.78rem; color: rgba(255,255,255,0.75); font-weight: 500; margin-top: 0.2rem; }
+.btn-back:hover{background:rgba(255,255,255,.25)}
 
-/* ===================== GRADE TABS ===================== */
-.grade-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: var(--surface); padding: 0.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
-.grade-tab {
-  flex: 1; padding: 0.85rem 1.5rem; border: none; border-radius: var(--radius-sm);
-  font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
-  cursor: pointer; transition: all 0.25s; color: var(--text-2);
-  background: transparent;
-}
-.grade-tab.active {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(30,95,138,0.25);
-}
-.grade-tab:not(.active):hover { background: var(--surface-2); color: var(--primary); }
+/* ---- REPORT PAGES ---- */
+.report{max-width:900px;margin:2rem auto;padding:0 1.5rem 4rem}
+.page{background:var(--surf);border-radius:20px;box-shadow:0 8px 40px rgba(30,95,138,.1);margin-bottom:2.5rem;overflow:hidden}
 
-/* ===================== KPI CARDS ===================== */
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
-.kpi-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 1.5rem 1.25rem;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  display: flex; align-items: center; gap: 1rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* ---- COVER PAGE ---- */
+.cover{
+  background:linear-gradient(135deg,var(--pd) 0%,var(--p) 55%,var(--pl) 100%);
+  min-height:700px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem 2rem;position:relative;overflow:hidden;
 }
-.kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-.kpi-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.5rem; }
-.kpi-icon.blue { background: linear-gradient(135deg, #e3f0fa, #c8e0f5); }
-.kpi-icon.green { background: linear-gradient(135deg, #e8f7f0, #cceedd); }
-.kpi-icon.orange { background: linear-gradient(135deg, #fef3e8, #fde0c4); }
-.kpi-icon.purple { background: linear-gradient(135deg, #f0ebfa, #ddd4f5); }
-.kpi-icon.teal { background: linear-gradient(135deg, #e5f6f5, #cceeed); }
-.kpi-value { font-family: 'Cairo', sans-serif; font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1; }
-.kpi-label { font-size: 0.88rem; color: var(--text-2); font-weight: 500; margin-top: 0.25rem; }
-.kpi-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 0.15rem; }
+.cover::before{
+  content:'';position:absolute;top:-40%;left:-15%;width:60%;height:180%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cover::after{
+  content:'';position:absolute;bottom:-20%;right:-10%;width:50%;height:120%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cover-logo{height:90px;width:auto;filter:brightness(0) invert(1);margin-bottom:1.5rem;position:relative;z-index:1}
+.cover-divider{width:60px;height:4px;background:rgba(255,255,255,.5);border-radius:2px;margin:1.2rem 0;position:relative;z-index:1}
+.cover-title{font-size:2rem;font-weight:800;color:#fff;text-align:center;position:relative;z-index:1;line-height:1.4;max-width:600px}
+.cover-subtitle{font-size:1.05rem;color:rgba(255,255,255,.85);margin-top:.6rem;text-align:center;position:relative;z-index:1}
+.cover-school{font-size:1rem;color:rgba(255,255,255,.75);margin-top:.3rem;text-align:center;position:relative;z-index:1}
+.cover-badges{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.2rem;position:relative;z-index:1}
+.cbadge{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  color:#fff;padding:.35rem 1rem;border-radius:999px;font-size:.85rem;font-weight:600;
+  backdrop-filter:blur(6px);
+}
+.cover-stats{
+  display:flex;gap:2rem;margin-top:2rem;position:relative;z-index:1;flex-wrap:wrap;justify-content:center;
+}
+.cstat{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:1rem 1.5rem;border-radius:16px;text-align:center;min-width:140px;
+  backdrop-filter:blur(8px);
+}
+.cstat-val{font-family:'Cairo',sans-serif;font-size:2.2rem;font-weight:800;color:#fff;line-height:1}
+.cstat-lbl{font-size:.82rem;color:rgba(255,255,255,.8);margin-top:.3rem}
+.cover-date{margin-top:1.5rem;color:rgba(255,255,255,.65);font-size:.85rem;position:relative;z-index:1}
 
-/* ===================== CHARTS ROW ===================== */
-.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-@media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
-.chart-card {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+/* ---- SECTION HEADERS ---- */
+.sec-hdr{
+  background:linear-gradient(135deg,var(--pd),var(--p));
+  padding:1.5rem 2rem;display:flex;align-items:center;gap:1rem;
 }
-.chart-card-title { font-size: 1.15rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; }
-.chart-card-title::before { content: ''; width: 4px; height: 20px; background: var(--primary); border-radius: 2px; display: inline-block; }
-.chart-wrap { position: relative; height: 280px; }
+.sec-hdr-icon{font-size:1.6rem}
+.sec-hdr-text h2{font-size:1.3rem;font-weight:800;color:#fff}
+.sec-hdr-text p{font-size:.9rem;color:rgba(255,255,255,.8);margin-top:.15rem}
+.sec-body{padding:2rem}
 
-/* ===================== SUBJECT FILTER ===================== */
-.subject-filter { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
-.subject-filter-label { font-weight: 700; color: var(--text-2); font-size: 0.95rem; margin-left: 0.5rem; }
-.subject-btn {
-  padding: 0.5rem 1.1rem; border-radius: 999px;
-  border: 1.5px solid var(--border); background: var(--surface);
-  font-family: 'Cairo', sans-serif; font-size: 0.9rem; font-weight: 600;
-  cursor: pointer; color: var(--text-2); transition: all 0.2s;
+/* ---- GRADE CARDS (SUMMARY) ---- */
+.grade-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.gcard{border:1.5px solid var(--bdr);border-radius:16px;overflow:hidden}
+.gcard-hdr{
+  padding:1rem 1.5rem;display:flex;align-items:center;gap:.8rem;
 }
-.subject-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 2px 12px rgba(30,95,138,0.25); }
-.subject-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+.gcard-hdr.g6{background:linear-gradient(135deg,#e3f0fa,#c8e0f5)}
+.gcard-hdr.g9{background:linear-gradient(135deg,#f0ebfa,#ddd4f5)}
+.gcard-hdr h3{font-size:1rem;font-weight:800;color:var(--pd)}
+.gcard-body{padding:1.25rem 1.5rem}
 
-/* ===================== DIFFICULTY OVERVIEW ===================== */
-.overview-card {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  margin-bottom: 2rem;
-}
-.overview-title { font-size: 1.15rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; }
-.overview-title::before { content: ''; width: 4px; height: 20px; background: var(--accent); border-radius: 2px; display: inline-block; }
-.overview-table { width: 100%; border-collapse: collapse; }
-.overview-table th { background: var(--surface-2); padding: 0.75rem 0.9rem; text-align: right; font-size: 0.88rem; color: var(--text-2); font-weight: 700; border-bottom: 2px solid var(--border); }
-.overview-table td { padding: 0.65rem 0.9rem; border-bottom: 1px solid rgba(30,95,138,0.07); font-size: 0.9rem; vertical-align: middle; }
-.overview-table tr:hover td { background: var(--surface-2); }
-.diff-bar-wrap { width: 100px; }
-.diff-bar { height: 8px; border-radius: 4px; background: rgba(30,95,138,0.1); overflow: hidden; }
-.diff-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
-.diff-tag { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
-.diff-tag.easy { background: var(--success-light); color: var(--success); }
-.diff-tag.medium { background: var(--warning-light); color: var(--warning); }
-.diff-tag.hard { background: var(--danger-light); color: var(--danger); }
-.q-num-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; font-family: 'Cairo', sans-serif; }
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(30,95,138,.07)}
+.stat-row:last-child{border-bottom:none}
+.stat-lbl{font-size:.88rem;color:var(--t2);font-weight:500}
+.stat-val{font-family:'Cairo',sans-serif;font-weight:800;color:var(--p);font-size:.95rem}
 
-/* ===================== QUESTIONS ===================== */
-.questions-section { margin-bottom: 2rem; }
-.section-title { font-size: 1.3rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 0.7rem; }
-.section-title .sec-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-.sec-icon.arabic { background: linear-gradient(135deg, #e3f0fa, #c8e0f5); }
-.sec-icon.science { background: linear-gradient(135deg, #e8f7f0, #cceedd); }
-.sec-icon.unnamed { background: linear-gradient(135deg, #f5f0fa, #ded4f5); }
-.questions-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
-.q-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  transition: box-shadow 0.2s;
-}
-.q-card:hover { box-shadow: var(--shadow); }
-.q-header {
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-.q-num { width: 36px; height: 36px; border-radius: 10px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 0.95rem; flex-shrink: 0; margin-top: 0.1rem; }
-.q-text { font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text); flex: 1; line-height: 1.6; }
-.q-text.unnamed-q { color: var(--text-2); font-style: italic; }
-.q-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
-.q-tag { padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
-.q-tag.subj-arabic { background: #e3f0fa; color: var(--primary); }
-.q-tag.subj-science { background: #e8f7f0; color: var(--success); }
-.q-tag.subj-unnamed { background: #f5f0fa; color: #6c4dbf; }
-.q-body { padding: 1.25rem 1.5rem; }
-.difficulty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
-.diff-label { font-size: 0.88rem; color: var(--text-2); font-weight: 700; white-space: nowrap; }
-.diff-track { flex: 1; height: 10px; background: rgba(30,95,138,0.08); border-radius: 5px; overflow: hidden; }
-.diff-track-fill { height: 100%; border-radius: 5px; }
-.diff-pct { font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 1rem; white-space: nowrap; }
-.options-list { display: grid; gap: 0.75rem; }
-.option-item {
-  border-radius: var(--radius-sm);
-  padding: 0.9rem 1rem;
-  border: 1.5px solid var(--border);
-  background: var(--surface-2);
-  transition: all 0.15s;
-}
-.option-item.correct {
-  border-color: rgba(39,160,98,0.4);
-  background: var(--success-light);
-}
-.option-item.wrong { background: var(--surface-2); }
-.option-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.55rem; }
-.option-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; }
-.option-icon.correct { background: var(--success); color: #fff; }
-.option-icon.wrong { background: rgba(30,95,138,0.1); color: var(--text-3); }
-.option-answer { flex: 1; font-size: 0.9rem; font-weight: 600; color: var(--text); }
-.option-answer.correct { color: var(--success); }
-.option-stats { display: flex; gap: 0.5rem; align-items: center; font-size: 0.85rem; }
-.option-count { color: var(--text-2); font-weight: 600; }
-.option-pct { font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 1rem; }
-.option-pct.correct { color: var(--success); }
-.option-pct.wrong { color: var(--text-2); }
-.option-bar-wrap { width: 100%; height: 7px; background: rgba(30,95,138,0.08); border-radius: 4px; overflow: hidden; }
-.option-bar { height: 100%; border-radius: 4px; }
-.bar-correct { background: linear-gradient(90deg, #27a062, #33c47a); }
-.bar-wrong { background: linear-gradient(90deg, rgba(30,95,138,0.3), rgba(30,95,138,0.5)); }
+.diff-pills{display:flex;gap:.5rem;margin-top:.9rem}
+.pill{padding:.25rem .75rem;border-radius:999px;font-size:.78rem;font-weight:700;font-family:'Cairo',sans-serif}
+.pill.easy{background:#e8f7f0;color:var(--ok)}
+.pill.med{background:#fef6e4;color:var(--warn)}
+.pill.hard{background:#fde8e6;color:var(--err)}
 
-/* ===================== FOOTER ===================== */
-.footer {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-  border: 1px solid var(--border);
-  margin-top: 2rem;
-  box-shadow: var(--shadow-sm);
-}
-.footer p { color: var(--text-3); font-size: 0.9rem; }
+.subj-bars{margin-top:.9rem;display:grid;gap:.5rem}
+.subj-bar-row{display:flex;align-items:center;gap:.75rem}
+.subj-bar-lbl{font-size:.8rem;color:var(--t2);width:90px;flex-shrink:0;font-weight:600}
+.subj-bar-track{flex:1;height:8px;background:rgba(30,95,138,.1);border-radius:4px;overflow:hidden}
+.subj-bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.subj-bar-pct{font-family:'Cairo',sans-serif;font-size:.8rem;font-weight:800;width:42px;text-align:left;color:var(--p)}
 
-/* ===================== RESPONSIVE ===================== */
-@media (max-width: 600px) {
-  .container { padding: 1rem; }
-  .header { padding: 1.25rem; }
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .overview-table { font-size: 0.8rem; }
-  .q-header { padding: 1rem; }
-  .q-body { padding: 1rem; }
+/* ---- TABLE ---- */
+.tbl-wrap{overflow-x:auto;margin-top:1rem}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead th{
+  background:var(--pd);color:#fff;
+  padding:.75rem .9rem;text-align:right;font-family:'Cairo',sans-serif;font-weight:700;
+  font-size:.84rem;white-space:nowrap;
+}
+tbody td{padding:.65rem .9rem;border-bottom:1px solid rgba(30,95,138,.07);vertical-align:middle}
+tbody tr:hover td{background:#f7fafd}
+tbody tr.easy-row td{background:#f0fbf5}
+tbody tr.hard-row td{background:#fff5f5}
+.num-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:7px;background:var(--p);
+  color:#fff;font-size:.78rem;font-weight:800;font-family:'Cairo',sans-serif;
+}
+.subj-tag{padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:700}
+.subj-tag.arabic{background:#e3f0fa;color:var(--p)}
+.subj-tag.unnamed{background:#f5f0fa;color:#6c4dbf}
+.subj-tag.science{background:#e8f7f0;color:var(--ok)}
+.diff-tag{padding:.2rem .6rem;border-radius:999px;font-size:.75rem;font-weight:700}
+.diff-tag.easy{background:#e8f7f0;color:var(--ok)}
+.diff-tag.med{background:#fef6e4;color:var(--warn)}
+.diff-tag.hard{background:#fde8e6;color:var(--err)}
+.bar-cell{display:flex;align-items:center;gap:.6rem}
+.mini-bar{width:70px;height:8px;background:rgba(30,95,138,.1);border-radius:4px;overflow:hidden;flex-shrink:0}
+.mini-bar-fill{height:100%;border-radius:4px}
+.pct-txt{font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem}
+
+/* ---- CRITICAL QUESTIONS ---- */
+.crit-section{margin-bottom:2rem}
+.crit-title{
+  font-size:1rem;font-weight:800;color:var(--pd);margin-bottom:1rem;
+  padding-bottom:.5rem;border-bottom:2px solid var(--bdr);
+  display:flex;align-items:center;gap:.6rem;
+}
+.crit-title::before{content:'';width:4px;height:18px;background:var(--err);border-radius:2px;display:inline-block}
+.q-card{border:1.5px solid var(--bdr);border-radius:12px;margin-bottom:1rem;overflow:hidden}
+.q-card-hdr{
+  background:#fff5f5;padding:1rem 1.25rem;
+  display:flex;align-items:flex-start;gap:.75rem;
+  border-bottom:1px solid rgba(192,57,43,.15);
+}
+.q-num{
+  width:32px;height:32px;border-radius:8px;background:var(--err);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cairo',sans-serif;font-weight:800;font-size:.88rem;flex-shrink:0;
+}
+.q-text{font-family:'Cairo',sans-serif;font-size:.9rem;font-weight:700;color:var(--t);flex:1;line-height:1.5}
+.q-diff-bar-wrap{display:flex;align-items:center;gap:.7rem;padding:.75rem 1.25rem;background:#fafafa;border-bottom:1px solid var(--bdr)}
+.q-diff-label{font-size:.82rem;font-weight:700;color:var(--t2);white-space:nowrap}
+.q-diff-track{flex:1;height:9px;background:rgba(30,95,138,.08);border-radius:5px;overflow:hidden}
+.q-diff-fill{height:100%;border-radius:5px}
+.q-diff-pct{font-family:'Cairo',sans-serif;font-weight:800;font-size:.95rem}
+.opts{padding:.75rem 1.25rem;display:grid;gap:.5rem}
+.opt{
+  padding:.6rem .9rem;border-radius:8px;border:1.5px solid var(--bdr);
+  background:#f7fafd;
+}
+.opt.correct{border-color:rgba(39,160,98,.35);background:#f0fbf5}
+.opt-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem}
+.opt-icon{
+  width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;flex-shrink:0;
+}
+.opt-icon.ok{background:var(--ok);color:#fff}
+.opt-icon.no{background:rgba(30,95,138,.12);color:var(--t3)}
+.opt-ans{flex:1;font-size:.84rem;font-weight:600;color:var(--t)}
+.opt-ans.ok{color:var(--ok)}
+.opt-stats{font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:800}
+.opt-stats.ok{color:var(--ok)}
+.opt-bar-wrap{width:100%;height:6px;background:rgba(30,95,138,.08);border-radius:3px;overflow:hidden}
+.opt-bar{height:100%;border-radius:3px}
+.bar-ok{background:linear-gradient(90deg,#27a062,#33c47a)}
+.bar-no{background:linear-gradient(90deg,rgba(30,95,138,.3),rgba(30,95,138,.5))}
+
+/* ---- FOOTER ---- */
+.report-footer{
+  background:var(--pd);padding:1.5rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+.report-footer p{color:rgba(255,255,255,.75);font-size:.82rem}
+
+/* ---- PRINT ---- */
+@media print{
+  @page{size:A4;margin:12mm 15mm}
+  body{background:#fff}
+  .action-bar{display:none!important}
+  .report{max-width:100%;margin:0;padding:0}
+  .page{box-shadow:none;border-radius:0;margin-bottom:0;page-break-after:always}
+  .page:last-child{page-break-after:auto}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .cover{min-height:100vh}
+  .bar-cell .mini-bar,.subj-bar-track,.q-diff-track,.opt-bar-wrap{background:#e8eef4!important}
+  tbody tr.easy-row td{background:#f0fbf5!important}
+  tbody tr.hard-row td{background:#fff5f5!important}
 }
 
-/* Hidden class */
-.hidden { display: none !important; }
-
-/* ---- PDF EXPORT BUTTON ---- */
-.export-btn {
-  display: inline-flex; align-items: center; gap: .55rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent-light));
-  color: #fff; border: none; padding: .65rem 1.4rem;
-  border-radius: 999px; font-family: 'Cairo', sans-serif;
-  font-size: .92rem; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 16px rgba(224,123,57,.4);
-  transition: all .2s; text-decoration: none;
+@media(max-width:700px){
+  .grade-cards{grid-template-columns:1fr}
+  .cover-stats{gap:1rem}
+  .cstat{min-width:120px}
 }
-.export-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(224,123,57,.55); }
-.export-btn svg { width: 18px; height: 18px; }
 </style>
 </head>
 <body>
-<div class="container">
-  
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-inner">
-      <div class="header-logo-wrap">
-        <img src="testlogo-w.png" alt="وزارة التعليم" onerror="this.style.display='none'">
-      </div>
-      <div class="header-text">
-        <div class="header-title">لوحة تحليل نتائج الاختبارات التشخيصية</div>
-        <div class="header-subtitle">مدرسة ابتدائية عمر المختار • متوسطة اشبيلية • قطاع الخبر</div>
-        <div class="header-badges">
-          <span class="header-badge">🏫 الصف السادس الابتدائي</span>
-          <span class="header-badge">🏫 الصف الثالث المتوسط</span>
-          <span class="header-badge">📍 قطاع الخبر</span>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1rem;">
-        <div class="header-stats" id="headerStats"><!-- filled by JS --></div>
-        <a href="print-report.html" target="_blank" class="export-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-            <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/>
-          </svg>
-          تصدير PDF / طباعة
-        </a>
-      </div>
-    </div>
-  </div>
 
-  <!-- GRADE TABS -->
-  <div class="grade-tabs">
-    <button class="grade-tab active" onclick="switchGrade('grade6')" id="tab-grade6">
-      📚 الصف السادس الابتدائي
-    </button>
-    <button class="grade-tab" onclick="switchGrade('grade9')" id="tab-grade9">
-      📚 الصف الثالث المتوسط
-    </button>
-  </div>
-
-  <!-- KPI CARDS -->
-  <div class="kpi-grid" id="kpiGrid"><!-- filled by JS --></div>
-
-  <!-- CHARTS ROW -->
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="chart-card-title">توزيع الدرجات</div>
-      <div class="chart-wrap"><canvas id="histChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-card-title">صعوبة الأسئلة حسب المادة</div>
-      <div class="chart-wrap"><canvas id="diffChart"></canvas></div>
-    </div>
-  </div>
-
-  <!-- OVERVIEW TABLE -->
-  <div class="overview-card">
-    <div class="overview-title">جدول تحليل بنود الأسئلة</div>
-    <div style="overflow-x:auto;">
-      <table class="overview-table" id="overviewTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>السؤال</th>
-            <th>المادة</th>
-            <th>عدد المجيبين</th>
-            <th>نسبة الإجابة الصحيحة</th>
-            <th>مستوى الصعوبة</th>
-            <th>درجة الصعوبة</th>
-          </tr>
-        </thead>
-        <tbody id="overviewBody"><!-- filled by JS --></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- SUBJECT FILTER -->
-  <div class="subject-filter">
-    <span class="subject-filter-label">تصفية حسب المادة:</span>
-    <button class="subject-btn active" onclick="filterSubject('all')" id="sbtn-all">الكل</button>
-    <button class="subject-btn" onclick="filterSubject('arabic')" id="sbtn-arabic">اللغة العربية</button>
-    <button class="subject-btn" onclick="filterSubject('unnamed')" id="sbtn-unnamed">الرياضيات</button>
-    <button class="subject-btn" onclick="filterSubject('science')" id="sbtn-science">العلوم</button>
-  </div>
-
-  <!-- QUESTIONS -->
-  <div class="questions-section">
-    <div id="questionsContainer"><!-- filled by JS --></div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <p>لوحة تحليل الاختبارات التشخيصية | قطاع الخبر | الفصل الدراسي الثالث 1446هـ</p>
-  </div>
-
+<!-- ACTION BAR -->
+<div class="action-bar no-print">
+  <span class="action-bar-title">📄 تقرير تحليل الاختبارات التشخيصية — قطاع الخبر 1446هـ</span>
+  <button class="btn-back" onclick="location.href=\'dashboard.html\'">← العودة للوحة</button>
+  <button class="btn-pdf" onclick="window.print()">⬇ تصدير PDF / طباعة</button>
 </div>
+
+<div class="report" id="report"></div>
 
 <script>
 const ALL_DATA = {"grade6": {"grade": "الصف السادس الابتدائي", "total_students": 118, "school_types": ["بنين"], "sectors": ["الخبر"], "schools": ["ابتدائية عمر المختار"], "avg_score": 20.2, "total_questions": 30, "questions": [{"index": 1, "question": ":نوع النص السابق", "is_named": true, "total": 118, "correct": 86, "difficulty": 72.9, "options": [{"answer": "وعظي", "count": 86, "percentage": 72.9, "is_correct": true}, {"answer": "خطابي", "count": 16, "percentage": 13.6, "is_correct": false}, {"answer": "قصصي", "count": 8, "percentage": 6.8, "is_correct": false}, {"answer": "علمي", "count": 8, "percentage": 6.8, "is_correct": false}], "subject": "arabic"}, {"index": 2, "question": "تطلق كلمة (خطاء) على من يخطئ:", "is_named": true, "total": 118, "correct": 87, "difficulty": 73.7, "options": [{"answer": "كثيرًا", "count": 87, "percentage": 73.7, "is_correct": true}, {"answer": "أحيانًا", "count": 23, "percentage": 19.5, "is_correct": false}, {"answer": "نادرًا", "count": 6, "percentage": 5.1, "is_correct": false}, {"answer": "قليلاً", "count": 2, "percentage": 1.7, "is_correct": false}], "subject": "arabic"}, {"index": 3, "question": "معنى كلمة الثرى:", "is_named": true, "total": 118, "correct": 110, "difficulty": 93.2, "options": [{"answer": "التراب الندي", "count": 110, "percentage": 93.2, "is_correct": true}, {"answer": "الحصى", "count": 4, "percentage": 3.4, "is_correct": false}, {"answer": "العشب", "count": 4, "percentage": 3.4, "is_correct": false}], "subject": "arabic"}, {"index": 4, "question": "الفكرة العامة لهذا النص", "is_named": true, "total": 118, "correct": 110, "difficulty": 93.2, "options": [{"answer": "الاعتذار عند الخطأ", "count": 110, "percentage": 93.2, "is_correct": true}, {"answer": "تبرير الخطأ", "count": 3, "percentage": 2.5, "is_correct": false}, {"answer": "تجاهل الاعتذار", "count": 3, "percentage": 2.5, "is_correct": false}, {"answer": "الإصرار على الخطأ", "count": 2, "percentage": 1.7, "is_correct": false}], "subject": "arabic"}, {"index": 5, "question": "لماذا حثنا الإسلام على تحري الصواب في الأقوال والأفعال؟", "is_named": true, "total": 118, "correct": 101, "difficulty": 85.6, "options": [{"answer": "لنسلم من الخطأ", "count": 101, "percentage": 85.6, "is_correct": true}, {"answer": "لنتقبل الخطأ", "count": 9, "percentage": 7.6, "is_correct": false}, {"answer": "لنتتبع الخطأ. طأ.", "count": 4, "percentage": 3.4, "is_correct": false}, {"answer": "لنقع في الخطأ", "count": 4, "percentage": 3.4, "is_correct": false}], "subject": "arabic"}, {"index": 6, "question": "ما مرادف كلمة الحرج؟", "is_named": true, "total": 118, "correct": 96, "difficulty": 81.4, "options": [{"answer": "الضيق", "count": 96, "percentage": 81.4, "is_correct": true}, {"answer": "الفخر", "count": 9, "percentage": 7.6, "is_correct": false}, {"answer": "الاعتزاز", "count": 8, "percentage": 6.8, "is_correct": false}, {"answer": "الراحة", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "arabic"}, {"index": 7, "question": ":العلاقة اللغوية بين (عالم وجاهل) هي", "is_named": true, "total": 118, "correct": 98, "difficulty": 83.1, "options": [{"answer": "التضاد", "count": 98, "percentage": 83.1, "is_correct": true}, {"answer": "الترادف", "count": 14, "percentage": 11.9, "is_correct": false}, {"answer": "الاستثناء", "count": 3, "percentage": 2.5, "is_correct": false}, {"answer": "التورية", "count": 3, "percentage": 2.5, "is_correct": false}], "subject": "arabic"}, {"index": 8, "question": ":نوع كلمة (التوابون)", "is_named": true, "total": 118, "correct": 111, "difficulty": 94.1, "options": [{"answer": "جمع مذكر سالم", "count": 111, "percentage": 94.1, "is_correct": true}, {"answer": "من الأفعال الخمسة", "count": 4, "percentage": 3.4, "is_correct": false}, {"answer": "جمع تكسير", "count": 2, "percentage": 1.7, "is_correct": false}, {"answer": "منتهى الجموع", "count": 1, "percentage": 0.8, "is_correct": false}], "subject": "arabic"}, {"index": 9, "question": ":عنوان لا يناسب هذا النص هو", "is_named": true, "total": 118, "correct": 99, "difficulty": 83.9, "options": [{"answer": "الشعور بالتعب", "count": 99, "percentage": 83.9, "is_correct": true}, {"answer": "وصية حكيم", "count": 9, "percentage": 7.6, "is_correct": false}, {"answer": "ثقافة الاعتذار", "count": 5, "percentage": 4.2, "is_correct": false}, {"answer": "ابن آدم خطاء", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "arabic"}, {"index": 10, "question": ":طريقة أخرى يستطيع الحكيم أن يوصي بها ابنه", "is_named": true, "total": 118, "correct": 112, "difficulty": 94.9, "options": [{"answer": "القدوة الحسنة", "count": 112, "percentage": 94.9, "is_correct": true}, {"answer": "التأمل", "count": 4, "percentage": 3.4, "is_correct": false}, {"answer": "العزلة", "count": 1, "percentage": 0.8, "is_correct": false}, {"answer": "الارتحال", "count": 1, "percentage": 0.8, "is_correct": false}], "subject": "arabic"}, {"index": 11, "question": "سؤال 11", "is_named": false, "total": 118, "correct": 69, "difficulty": 58.5, "options": [{"answer": "أ", "count": 69, "percentage": 58.5, "is_correct": true}, {"answer": "ب", "count": 33, "percentage": 28.0, "is_correct": false}, {"answer": "ج", "count": 11, "percentage": 9.3, "is_correct": false}, {"answer": "د", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "unnamed"}, {"index": 12, "question": "سؤال 12", "is_named": false, "total": 118, "correct": 48, "difficulty": 40.7, "options": [{"answer": "د", "count": 48, "percentage": 40.7, "is_correct": true}, {"answer": "أ", "count": 34, "percentage": 28.8, "is_correct": false}, {"answer": "ب", "count": 20, "percentage": 16.9, "is_correct": false}, {"answer": "ج", "count": 16, "percentage": 13.6, "is_correct": false}], "subject": "unnamed"}, {"index": 13, "question": "سؤال 13", "is_named": false, "total": 118, "correct": 47, "difficulty": 39.8, "options": [{"answer": "ج", "count": 53, "percentage": 44.9, "is_correct": false}, {"answer": "ب", "count": 47, "percentage": 39.8, "is_correct": true}, {"answer": "أ", "count": 11, "percentage": 9.3, "is_correct": false}, {"answer": "د", "count": 7, "percentage": 5.9, "is_correct": false}], "subject": "unnamed"}, {"index": 14, "question": "سؤال 14", "is_named": false, "total": 118, "correct": 61, "difficulty": 51.7, "options": [{"answer": "أ", "count": 61, "percentage": 51.7, "is_correct": true}, {"answer": "د", "count": 33, "percentage": 28.0, "is_correct": false}, {"answer": "ب", "count": 14, "percentage": 11.9, "is_correct": false}, {"answer": "ج", "count": 10, "percentage": 8.5, "is_correct": false}], "subject": "unnamed"}, {"index": 15, "question": "سؤال 15", "is_named": false, "total": 118, "correct": 51, "difficulty": 43.2, "options": [{"answer": "8", "count": 51, "percentage": 43.2, "is_correct": true}, {"answer": "10", "count": 38, "percentage": 32.2, "is_correct": false}, {"answer": "9", "count": 18, "percentage": 15.3, "is_correct": false}, {"answer": "5", "count": 11, "percentage": 9.3, "is_correct": false}], "subject": "unnamed"}, {"index": 16, "question": "سؤال 16", "is_named": false, "total": 118, "correct": 84, "difficulty": 71.2, "options": [{"answer": "أ", "count": 84, "percentage": 71.2, "is_correct": true}, {"answer": "د", "count": 15, "percentage": 12.7, "is_correct": false}, {"answer": "ب", "count": 13, "percentage": 11.0, "is_correct": false}, {"answer": "ج", "count": 6, "percentage": 5.1, "is_correct": false}], "subject": "unnamed"}, {"index": 17, "question": "سؤال 17", "is_named": false, "total": 118, "correct": 42, "difficulty": 35.6, "options": [{"answer": "أ", "count": 44, "percentage": 37.3, "is_correct": false}, {"answer": "ب", "count": 42, "percentage": 35.6, "is_correct": true}, {"answer": "د", "count": 19, "percentage": 16.1, "is_correct": false}, {"answer": "ج", "count": 13, "percentage": 11.0, "is_correct": false}], "subject": "unnamed"}, {"index": 18, "question": "سؤال 18", "is_named": false, "total": 118, "correct": 40, "difficulty": 33.9, "options": [{"answer": "ج", "count": 43, "percentage": 36.4, "is_correct": false}, {"answer": "ب", "count": 40, "percentage": 33.9, "is_correct": true}, {"answer": "أ", "count": 21, "percentage": 17.8, "is_correct": false}, {"answer": "د", "count": 14, "percentage": 11.9, "is_correct": false}], "subject": "unnamed"}, {"index": 19, "question": "سؤال 19", "is_named": false, "total": 118, "correct": 58, "difficulty": 49.2, "options": [{"answer": "د", "count": 58, "percentage": 49.2, "is_correct": true}, {"answer": "ب", "count": 32, "percentage": 27.1, "is_correct": false}, {"answer": "ج", "count": 18, "percentage": 15.3, "is_correct": false}, {"answer": "أ", "count": 10, "percentage": 8.5, "is_correct": false}], "subject": "unnamed"}, {"index": 20, "question": "سؤال 20", "is_named": false, "total": 118, "correct": 55, "difficulty": 46.6, "options": [{"answer": "د", "count": 55, "percentage": 46.6, "is_correct": true}, {"answer": "ج", "count": 34, "percentage": 28.8, "is_correct": false}, {"answer": "ب", "count": 18, "percentage": 15.3, "is_correct": false}, {"answer": "أ", "count": 11, "percentage": 9.3, "is_correct": false}], "subject": "unnamed"}, {"index": 21, "question": "يوضح الجدول التالي بعض الكائنات الحية وأعضاء التنفس لديها. أي خيار يمثل المطابقة الصحيحة؟", "is_named": true, "total": 118, "correct": 79, "difficulty": 66.9, "options": [{"answer": "الجلد والرئتان (1)  ، الرئتان (2)  ، الخياشيم (3)", "count": 79, "percentage": 66.9, "is_correct": true}, {"answer": "الخياشيم فقط (1)  ، الرئتين (2)  ، الخياشيم والجلد (3)", "count": 19, "percentage": 16.1, "is_correct": false}, {"answer": "الخياشيم  (1)  ، الجلد والرئتان (2)  ، الجلد فقط (3)", "count": 13, "percentage": 11.0, "is_correct": false}, {"answer": "الرئتين (1)  ، الخياشيم (2)  ، الجلد فقط (3)", "count": 7, "percentage": 5.9, "is_correct": false}], "subject": "science"}, {"index": 22, "question": "لاحظ طالب خليتين كما في الشكلين المرقّمين (١) و(٢). أيُّ خيار يحدِّد الخلية النباتية بشكل صحيح مع السبب الذي يستدل به من الشكل؟", "is_named": true, "total": 118, "correct": 90, "difficulty": 76.3, "options": [{"answer": "الشكل (٢) لأنها تحتوي على جدار خلوي وبلاستيدات خضراء", "count": 90, "percentage": 76.3, "is_correct": true}, {"answer": "الشكل (١) لأنها تحتوي على نواة واضحة وسيتوبلازم", "count": 15, "percentage": 12.7, "is_correct": false}, {"answer": "الشكل (٢) لأنها تحتوي على أجسام جولجي وميتوكوندريا", "count": 11, "percentage": 9.3, "is_correct": false}, {"answer": "الشكل (١) لأنها تحتوي على أجسام جولجي والشبكة الإندوبلازمية", "count": 2, "percentage": 1.7, "is_correct": false}], "subject": "science"}, {"index": 23, "question": "وجد طالب صخرًا كما في الصورة، وظهر بداخله طبعات لأوراق نبات. ما نوع هذا الصخر غالبًا؟", "is_named": true, "total": 118, "correct": 80, "difficulty": 67.8, "options": [{"answer": "رسوبي", "count": 80, "percentage": 67.8, "is_correct": true}, {"answer": "متحول", "count": 24, "percentage": 20.3, "is_correct": false}, {"answer": "ناري", "count": 9, "percentage": 7.6, "is_correct": false}, {"answer": "زجاج بركاني", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "science"}, {"index": 24, "question": "سخّن أحمد  كأسًا من الماء على السخان، وبعد دقائق لاحظ تكوّن فقاعات داخل الماء ثم بدأ يتصاعد بخار. ما الاستنتاج الصحيح؟", "is_named": true, "total": 118, "correct": 78, "difficulty": 66.1, "options": [{"answer": "حدث تغير فيزيائي لأن الماء تغيّرت حالته فقط من سائل إلى غاز دون تكوّن مادة جديدة", "count": 78, "percentage": 66.1, "is_correct": true}, {"answer": "حدث تغير كيميائي لأن فقاعات الغاز تعني تكوّن مادة جديدة", "count": 22, "percentage": 18.6, "is_correct": false}, {"answer": "لم يحدث أي تغير لأن الماء ما زال ماءً", "count": 10, "percentage": 8.5, "is_correct": false}, {"answer": "حدث تغير فيزيائي لأن لون الماء تغيّر", "count": 8, "percentage": 6.8, "is_correct": false}], "subject": "science"}, {"index": 25, "question": "تعيش النحلة على أزهار النبات فتأخذ الرحيق غذاءً لها، وفي الوقت نفسه تنقل حبوب اللقاح فتساعد النبات على التكاثر. ما نوع العلاقة بين النحلة والنبات؟", "is_named": true, "total": 118, "correct": 93, "difficulty": 78.8, "options": [{"answer": "تبادل المنفعة", "count": 93, "percentage": 78.8, "is_correct": true}, {"answer": "التعايش", "count": 18, "percentage": 15.3, "is_correct": false}, {"answer": "التطفل", "count": 5, "percentage": 4.2, "is_correct": false}, {"answer": "الافتراس", "count": 2, "percentage": 1.7, "is_correct": false}], "subject": "science"}, {"index": 26, "question": "تحتوي خلايا جسم الإنسان (مثل خلايا الجلد) على 46 كروموسومًا. كم عدد الكروموسومات في الحيوان المنوي/المشيج المذكر.؟", "is_named": true, "total": 118, "correct": 89, "difficulty": 75.4, "options": [{"answer": "23", "count": 89, "percentage": 75.4, "is_correct": true}, {"answer": "46", "count": 17, "percentage": 14.4, "is_correct": false}, {"answer": "30", "count": 9, "percentage": 7.6, "is_correct": false}, {"answer": "69", "count": 3, "percentage": 2.5, "is_correct": false}], "subject": "science"}, {"index": 27, "question": "في السلسلة الغذائية الموضحة في الشكل، ما الكائن الحي الذي يُعدّ المستهلك الثاني؟", "is_named": true, "total": 118, "correct": 80, "difficulty": 67.8, "options": [{"answer": "الضفدع", "count": 80, "percentage": 67.8, "is_correct": true}, {"answer": "الجرادة", "count": 22, "percentage": 18.6, "is_correct": false}, {"answer": "الصقر", "count": 11, "percentage": 9.3, "is_correct": false}, {"answer": "العشب", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "science"}, {"index": 28, "question": "أيُّ الطرق التالية تُستخدم لتقليل انجراف التربة على المنحدرات الجبلية؟", "is_named": true, "total": 118, "correct": 75, "difficulty": 63.6, "options": [{"answer": "المصاطب الزراعية", "count": 75, "percentage": 63.6, "is_correct": true}, {"answer": "مصدّات الرياح", "count": 29, "percentage": 24.6, "is_correct": false}, {"answer": "تدوير المحاصيل", "count": 7, "percentage": 5.9, "is_correct": false}, {"answer": "الريّ بالتنقيط", "count": 7, "percentage": 5.9, "is_correct": false}], "subject": "science"}, {"index": 29, "question": ":تُغطّى الأسلاك الكهربائية بطبقة من البلاستيك؛ لأن البلاستيك", "is_named": true, "total": 118, "correct": 95, "difficulty": 80.5, "options": [{"answer": "يمنع انتقال الكهرباء إلى اليد عند لمس السلك", "count": 95, "percentage": 80.5, "is_correct": true}, {"answer": "يساعد على مرور الكهرباء بسهولة", "count": 13, "percentage": 11.0, "is_correct": false}, {"answer": "يجعل السلك يعمل دون مصدر طاقة", "count": 5, "percentage": 4.2, "is_correct": false}, {"answer": "يزيد من قوة الكهرباء داخل السلك", "count": 5, "percentage": 4.2, "is_correct": false}], "subject": "science"}, {"index": 30, "question": "يوضح الجدول الآتي ٤ حالات لطلاب سحبوا كتاباً على سطح طاولة، مع اختلاف القوة والمسافة. أي الطلاب بذل شغلاً أكبر؟", "is_named": true, "total": 118, "correct": 60, "difficulty": 50.8, "options": [{"answer": "الطالب (٤)", "count": 60, "percentage": 50.8, "is_correct": true}, {"answer": "الطالب (٢)", "count": 33, "percentage": 28.0, "is_correct": false}, {"answer": "الطالب (٣)", "count": 14, "percentage": 11.9, "is_correct": false}, {"answer": "الطالب (١)", "count": 11, "percentage": 9.3, "is_correct": false}], "subject": "science"}], "score_histogram": [{"label": "10-11", "count": 4}, {"label": "12-13", "count": 8}, {"label": "14-15", "count": 13}, {"label": "16-17", "count": 10}, {"label": "18-19", "count": 21}, {"label": "20-21", "count": 14}, {"label": "22-23", "count": 17}, {"label": "24-25", "count": 8}, {"label": "26-27", "count": 14}, {"label": "28-29", "count": 9}]}, "grade9": {"grade": "الصف الثالث المتوسط", "total_students": 64, "school_types": ["بنين"], "sectors": ["الخبر"], "schools": ["متوسطة اشبيلية"], "avg_score": 19.19, "total_questions": 30, "questions": [{"index": 1, "question": "ظهرت فكرة الإنترنت في بداية", "is_named": true, "total": 64, "correct": 60, "difficulty": 93.8, "options": [{"answer": "الستينيات", "count": 60, "percentage": 93.8, "is_correct": true}, {"answer": "الخمسينيات", "count": 2, "percentage": 3.1, "is_correct": false}, {"answer": "التسعينيات", "count": 2, "percentage": 3.1, "is_correct": false}], "subject": "arabic"}, {"index": 2, "question": "لكي نتجنب مخاطر الإنترنت يجب أن:", "is_named": true, "total": 64, "correct": 60, "difficulty": 93.8, "options": [{"answer": "نستخدمه باعتدال", "count": 60, "percentage": 93.8, "is_correct": true}, {"answer": "نستخدمه طويلاً", "count": 3, "percentage": 4.7, "is_correct": false}, {"answer": "نستخدمه دائماً", "count": 1, "percentage": 1.6, "is_correct": false}], "subject": "arabic"}, {"index": 3, "question": "مرادف كلمة \"إرهاق\":", "is_named": true, "total": 64, "correct": 52, "difficulty": 81.2, "options": [{"answer": "تعب", "count": 52, "percentage": 81.2, "is_correct": true}, {"answer": "راحة", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "نشاط", "count": 4, "percentage": 6.2, "is_correct": false}], "subject": "arabic"}, {"index": 4, "question": "مفرد كلمة (الشبهات):", "is_named": true, "total": 64, "correct": 58, "difficulty": 90.6, "options": [{"answer": "شبهة", "count": 58, "percentage": 90.6, "is_correct": true}, {"answer": "شبيه", "count": 3, "percentage": 4.7, "is_correct": false}, {"answer": "مشابه", "count": 2, "percentage": 3.1, "is_correct": false}, {"answer": "مشتبه", "count": 1, "percentage": 1.6, "is_correct": false}], "subject": "arabic"}, {"index": 5, "question": "العنوان المناسب للنص هو:", "is_named": true, "total": 64, "correct": 60, "difficulty": 93.8, "options": [{"answer": "شبكة الإنترنت", "count": 60, "percentage": 93.8, "is_correct": true}, {"answer": "إضاعة الوقت", "count": 2, "percentage": 3.1, "is_correct": false}, {"answer": "الدعوة إلى الإسلام", "count": 1, "percentage": 1.6, "is_correct": false}, {"answer": "صحبة السوء", "count": 1, "percentage": 1.6, "is_correct": false}], "subject": "arabic"}, {"index": 6, "question": "ظهرت فكرة الإنترنت في بداية الستينيات في الولايات المتحدة الأمريكية غرض الكاتب في الجملة السابقة:", "is_named": true, "total": 64, "correct": 52, "difficulty": 81.2, "options": [{"answer": "تاريخ الإنترنت", "count": 52, "percentage": 81.2, "is_correct": true}, {"answer": "أهمية الإنترنت", "count": 5, "percentage": 7.8, "is_correct": false}, {"answer": "تطور الإنترنت", "count": 5, "percentage": 7.8, "is_correct": false}, {"answer": "خصائص الإنترنت", "count": 2, "percentage": 3.1, "is_correct": false}], "subject": "arabic"}, {"index": 7, "question": "\"ومن فوائد الإنترنت  نشر العلم النافع والأخلاق الحسنة\" نوع الجملة السابقة:", "is_named": true, "total": 64, "correct": 50, "difficulty": 78.1, "options": [{"answer": "خبرية", "count": 50, "percentage": 78.1, "is_correct": true}, {"answer": "مؤكدة", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "منفية", "count": 5, "percentage": 7.8, "is_correct": false}, {"answer": "استثنائية", "count": 1, "percentage": 1.6, "is_correct": false}], "subject": "arabic"}, {"index": 8, "question": "معنى عبارة (الأسلوب الأمثل) في النص هو:", "is_named": true, "total": 64, "correct": 44, "difficulty": 68.8, "options": [{"answer": "الأسلوب المفضل", "count": 44, "percentage": 68.8, "is_correct": true}, {"answer": "الأسلوب الواقعي", "count": 14, "percentage": 21.9, "is_correct": false}, {"answer": "الأسلوب الخيالي", "count": 4, "percentage": 6.2, "is_correct": false}, {"answer": "الأسلوب الخطر", "count": 2, "percentage": 3.1, "is_correct": false}], "subject": "arabic"}, {"index": 9, "question": "كلمة (إيذاءً) وردت في النص في موقع إعرابي هو:", "is_named": true, "total": 64, "correct": 42, "difficulty": 65.6, "options": [{"answer": "مفعول مطلق", "count": 42, "percentage": 65.6, "is_correct": true}, {"answer": "توكيد معنوي", "count": 10, "percentage": 15.6, "is_correct": false}, {"answer": "مفعول فيه", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "فاعل", "count": 3, "percentage": 4.7, "is_correct": false}], "subject": "arabic"}, {"index": 10, "question": "تصنيف الكلمات التالية (من - إلى - فكرة - فوائد) هو:", "is_named": true, "total": 64, "correct": 41, "difficulty": 64.1, "options": [{"answer": "حروف وأسماء", "count": 41, "percentage": 64.1, "is_correct": true}, {"answer": "أسماء وأفعال وحروف", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "أفعال وحروف", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "أفعال وأسماء", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "arabic"}, {"index": 11, "question": "سؤال 11", "is_named": false, "total": 64, "correct": 24, "difficulty": 37.5, "options": [{"answer": "أ", "count": 24, "percentage": 37.5, "is_correct": true}, {"answer": "ب", "count": 18, "percentage": 28.1, "is_correct": false}, {"answer": "ج", "count": 16, "percentage": 25.0, "is_correct": false}, {"answer": "د", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "unnamed"}, {"index": 12, "question": "سؤال 12", "is_named": false, "total": 64, "correct": 32, "difficulty": 50.0, "options": [{"answer": "د", "count": 32, "percentage": 50.0, "is_correct": true}, {"answer": "ج", "count": 15, "percentage": 23.4, "is_correct": false}, {"answer": "أ", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "ب", "count": 8, "percentage": 12.5, "is_correct": false}], "subject": "unnamed"}, {"index": 13, "question": "سؤال 13", "is_named": false, "total": 64, "correct": 24, "difficulty": 37.5, "options": [{"answer": "أ", "count": 24, "percentage": 37.5, "is_correct": true}, {"answer": "ب", "count": 14, "percentage": 21.9, "is_correct": false}, {"answer": "ج", "count": 13, "percentage": 20.3, "is_correct": false}, {"answer": "د", "count": 13, "percentage": 20.3, "is_correct": false}], "subject": "unnamed"}, {"index": 14, "question": "سؤال 14", "is_named": false, "total": 64, "correct": 34, "difficulty": 53.1, "options": [{"answer": "ج", "count": 34, "percentage": 53.1, "is_correct": true}, {"answer": "أ", "count": 16, "percentage": 25.0, "is_correct": false}, {"answer": "ب", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "د", "count": 3, "percentage": 4.7, "is_correct": false}], "subject": "unnamed"}, {"index": 15, "question": "سؤال 15", "is_named": false, "total": 64, "correct": 37, "difficulty": 57.8, "options": [{"answer": "ب", "count": 37, "percentage": 57.8, "is_correct": true}, {"answer": "ج", "count": 12, "percentage": 18.8, "is_correct": false}, {"answer": "أ", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "د", "count": 4, "percentage": 6.2, "is_correct": false}], "subject": "unnamed"}, {"index": 16, "question": "سؤال 16", "is_named": false, "total": 64, "correct": 25, "difficulty": 39.1, "options": [{"answer": "أ", "count": 25, "percentage": 39.1, "is_correct": true}, {"answer": "ب", "count": 18, "percentage": 28.1, "is_correct": false}, {"answer": "ج", "count": 12, "percentage": 18.8, "is_correct": false}, {"answer": "د", "count": 9, "percentage": 14.1, "is_correct": false}], "subject": "unnamed"}, {"index": 17, "question": "سؤال 17", "is_named": false, "total": 64, "correct": 27, "difficulty": 42.2, "options": [{"answer": "ب", "count": 27, "percentage": 42.2, "is_correct": true}, {"answer": "أ", "count": 15, "percentage": 23.4, "is_correct": false}, {"answer": "ج", "count": 13, "percentage": 20.3, "is_correct": false}, {"answer": "د", "count": 9, "percentage": 14.1, "is_correct": false}], "subject": "unnamed"}, {"index": 18, "question": "سؤال 18", "is_named": false, "total": 64, "correct": 33, "difficulty": 51.6, "options": [{"answer": "ج", "count": 33, "percentage": 51.6, "is_correct": true}, {"answer": "ب", "count": 18, "percentage": 28.1, "is_correct": false}, {"answer": "د", "count": 7, "percentage": 10.9, "is_correct": false}, {"answer": "أ", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "unnamed"}, {"index": 19, "question": "سؤال 19", "is_named": false, "total": 64, "correct": 43, "difficulty": 67.2, "options": [{"answer": "ب", "count": 43, "percentage": 67.2, "is_correct": true}, {"answer": "ج", "count": 13, "percentage": 20.3, "is_correct": false}, {"answer": "د", "count": 6, "percentage": 9.4, "is_correct": false}, {"answer": "أ", "count": 2, "percentage": 3.1, "is_correct": false}], "subject": "unnamed"}, {"index": 20, "question": "سؤال 20", "is_named": false, "total": 64, "correct": 33, "difficulty": 51.6, "options": [{"answer": "د", "count": 33, "percentage": 51.6, "is_correct": true}, {"answer": "ج", "count": 12, "percentage": 18.8, "is_correct": false}, {"answer": "أ", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "ب", "count": 8, "percentage": 12.5, "is_correct": false}], "subject": "unnamed"}, {"index": 21, "question": "في تجربة شد حبل، إذا أثرت قوة محصلة غير متزنة على الحبل باتجاه اليسار، فأي الاحتمالات التالية يفسر هذه النتيجة؟", "is_named": true, "total": 64, "correct": 43, "difficulty": 67.2, "options": [{"answer": "القوة المؤثرة لليسار أكبر من قوة المقاومة أو القوة المعاكسة لليمين.", "count": 43, "percentage": 67.2, "is_correct": true}, {"answer": "القوة المؤثرة لليمين أكبر من القوة المؤثرة لليسار", "count": 12, "percentage": 18.8, "is_correct": false}, {"answer": "القوتان المؤثرتان متساويتان في المقدار ومتضادتان في الاتجاه.", "count": 7, "percentage": 10.9, "is_correct": false}, {"answer": "الحبل لا يتحرك لأن القوة المحصلة تساوي صفراً", "count": 2, "percentage": 3.1, "is_correct": false}], "subject": "science"}, {"index": 22, "question": "لماذا يندر وجود أحافير واضحة المعالم في الصخور المتحولة مقارنة بالصخور الرسوبية؟", "is_named": true, "total": 64, "correct": 43, "difficulty": 67.2, "options": [{"answer": "لأن الحرارة والضغط الشديدين أثناء التحول يؤديان لتشويه أو صهر بقايا الكائنات", "count": 43, "percentage": 67.2, "is_correct": true}, {"answer": "لأن الصخور المتحولة تتكون في أعماق البحار حيث لا توجد كائنات.", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "لأن الصخور المتحولة تبرد بسرعة كبيرة فلا تسمح للأحافير بالتكون", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "لأن الأحافير لا تتكون إلا في الصخور البركانية الفتاتية فقط", "count": 4, "percentage": 6.2, "is_correct": false}], "subject": "science"}, {"index": 23, "question": "الكائنات   التي تمتلك تماثلاً جانبياً (مثل العقرب) تتميز عن الكائنات ذات   التماثل الشعاعي (م", "is_named": true, "total": 64, "correct": 39, "difficulty": 60.9, "options": [{"answer": "وجود جانبين أيمن وأيسر متميزين مما يسهل الحركة السريعة في اتجاه محدد", "count": 39, "percentage": 60.9, "is_correct": true}, {"answer": "القدرة على الانقسام لعدة أنصاف متماثلة من أي محور مركزي", "count": 10, "percentage": 15.6, "is_correct": false}, {"answer": "عدم وجود رأس أو أطراف متخصصة في جسمها", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "أنها تعيش فقط في البيئات المائية الساكنة", "count": 7, "percentage": 10.9, "is_correct": false}], "subject": "science"}, {"index": 24, "question": "إذا تم نقل الدرج (ج) من مكانه إلى مكان الدرج (أ)، فماذا يحدث لطاقة وضعه؟", "is_named": true, "total": 64, "correct": 40, "difficulty": 62.5, "options": [{"answer": "تزداد لأن طاقة الوضع تعتمد طردياً على الارتفاع عن سطح الأرض", "count": 40, "percentage": 62.5, "is_correct": true}, {"answer": "تقل لأن الدرج بذل طاقة أثناء صعوده", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "تظل ثابتة لأن كتلة الدرج لم تتغير", "count": 10, "percentage": 15.6, "is_correct": false}, {"answer": "تتحول بالكامل إلى طاقة حرارية بسبب الاحتكاك مع الدرج الآخر", "count": 3, "percentage": 4.7, "is_correct": false}], "subject": "science"}, {"index": 25, "question": "أي من الأجزاء التالية في جسم الإنسان يعتبر \"نسيجاً غير حي\" وبالتالي يفتقر لوجود الخلايا العصبية النشطة؟", "is_named": true, "total": 64, "correct": 37, "difficulty": 57.8, "options": [{"answer": "الطبقة السطحية من الأظافر والشعر", "count": 37, "percentage": 57.8, "is_correct": true}, {"answer": "الشبكية الموجودة في خلفية العين", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "الطبقات العميقة من الجلد", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "البطانة الداخلية للأمعاء الدقيقة", "count": 7, "percentage": 10.9, "is_correct": false}], "subject": "science"}, {"index": 26, "question": "عند زيادة حدة الصوت، تتقارب جزيئات الوسط في بعض المناطق وتتباعد في أخرى. ماذا نسمي المنطقة التي يصل فيها ضغط الهواء إلى ذروته؟", "is_named": true, "total": 64, "correct": 42, "difficulty": 65.6, "options": [{"answer": "التضاغط", "count": 42, "percentage": 65.6, "is_correct": true}, {"answer": "الارتداد", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "التخلخل", "count": 8, "percentage": 12.5, "is_correct": false}, {"answer": "الانكسار", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "science"}, {"index": 27, "question": ":عند انزلاق صفيحتين تكتونيتين بجانب بعضهما البعض دون حدوث تصادم أو تباعد (حدود جانبية)، فإن النتيجة الجيولوجية الأكثر شيوعاً هي", "is_named": true, "total": 64, "correct": 45, "difficulty": 70.3, "options": [{"answer": "حدوث نشاط زلزالي نتيجة تكسر الصخور عند منطقة الصدع", "count": 45, "percentage": 70.3, "is_correct": true}, {"answer": "تكون سلاسل جبلية بركانية شاهقة", "count": 10, "percentage": 15.6, "is_correct": false}, {"answer": "تكون جزر بركانية جديدة في وسط الصفيحة", "count": 5, "percentage": 7.8, "is_correct": false}, {"answer": "اختفاء المحيطات وتكون خنادق بحرية عميقة", "count": 4, "percentage": 6.2, "is_correct": false}], "subject": "science"}, {"index": 28, "question": "عندما تحتاج الخلية إلى امتصاص جزيئات الغذاء من وسط ذو تركيز منخفض إلى داخلها حيث التركيز عالي، فإنها تستخدم عملية تشبه عمل \"المضخة\"، وهي:", "is_named": true, "total": 64, "correct": 37, "difficulty": 57.8, "options": [{"answer": "النقل النشط", "count": 37, "percentage": 57.8, "is_correct": true}, {"answer": "الخاصية الأسموزية", "count": 11, "percentage": 17.2, "is_correct": false}, {"answer": "النقل السلبي", "count": 10, "percentage": 15.6, "is_correct": false}, {"answer": "الانتشار البسيط", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "science"}, {"index": 29, "question": "أي الأحداث التالية يميز الطور الاستوائي في الانقسام المتساوي ويجعله مختلفاً عن الطور التمهيدي؟", "is_named": true, "total": 64, "correct": 37, "difficulty": 57.8, "options": [{"answer": "ترتيب الكروموسومات في صف واحد وسط الخلية لضمان التوزيع العادل", "count": 37, "percentage": 57.8, "is_correct": true}, {"answer": "انقسام الخلية إلى خليتين ابنتين متطابقتين", "count": 15, "percentage": 23.4, "is_correct": false}, {"answer": "اختفاء الغلاف النووي وبدء ظهور الخيوط المغزلية", "count": 7, "percentage": 10.9, "is_correct": false}, {"answer": "ابتعاد الكروماتيدات الشقيقة نحو أقطاب الخلية", "count": 5, "percentage": 7.8, "is_correct": false}], "subject": "science"}, {"index": 30, "question": "تختلف \"العناصر الانتقالية\" (المجموعات 3-12) عن \"العناصر الممثلة\" في الجدول الدوري بأنها:", "is_named": true, "total": 64, "correct": 34, "difficulty": 53.1, "options": [{"answer": "تتميز بتعقيد في توزيع إلكتروناتها في المستويات الفرعية الداخلية", "count": 34, "percentage": 53.1, "is_correct": true}, {"answer": "تحتوي دائماً على 8 إلكترونات في مستوى طاقتها الأخير", "count": 15, "percentage": 23.4, "is_correct": false}, {"answer": "تقع جميعها في أقصى يمين الجدول الدوري (المجموعات 17 و18)", "count": 9, "percentage": 14.1, "is_correct": false}, {"answer": "جميعها غازات خاملة لا تدخل في التفاعلات الكيميائية", "count": 6, "percentage": 9.4, "is_correct": false}], "subject": "science"}], "score_histogram": [{"label": "5-6", "count": 1}, {"label": "7-8", "count": 3}, {"label": "9-10", "count": 1}, {"label": "11-12", "count": 10}, {"label": "13-14", "count": 5}, {"label": "15-16", "count": 10}, {"label": "17-18", "count": 3}, {"label": "19-20", "count": 3}, {"label": "21-22", "count": 0}, {"label": "23-24", "count": 4}, {"label": "25-26", "count": 8}, {"label": "27-28", "count": 13}, {"label": "29-30", "count": 3}]}};
 
-let currentGrade = 'grade6';
-let currentSubject = 'all';
-let histChartObj = null;
-let diffChartObj = null;
+const SUBJ_MAP = {arabic:'اللغة العربية', unnamed:'الرياضيات', science:'العلوم'};
+const SUBJ_CLS = {arabic:'arabic', unnamed:'unnamed', science:'science'};
 
-function getDiffLevel(pct) {
-  if (pct >= 75) return {label: 'سهل', cls: 'easy'};
-  if (pct >= 45) return {label: 'متوسط', cls: 'medium'};
-  return {label: 'صعب', cls: 'hard'};
+function diffLevel(d){
+  if(d>=75) return {label:'سهل', cls:'easy', color:'#27a062'};
+  if(d>=45) return {label:'متوسط', cls:'med', color:'#d68e1a'};
+  return {label:'صعب', cls:'hard', color:'#c0392b'};
 }
 
-function getDiffColor(pct) {
-  if (pct >= 75) return '#27a062';
-  if (pct >= 45) return '#d68e1a';
-  return '#c0392b';
+function subjAvg(qs, subj){
+  const f = qs.filter(q=>q.subject===subj);
+  return f.length ? (f.reduce((s,q)=>s+q.difficulty,0)/f.length).toFixed(1) : 0;
 }
 
-function getSubjectLabel(s) {
-  if (s === 'arabic') return 'اللغة العربية';
-  if (s === 'science') return 'العلوم';
-  return 'الرياضيات';
+function renderCover(){
+  const g6=ALL_DATA.grade6, g9=ALL_DATA.grade9;
+  const date = new Date().toLocaleDateString('ar-SA-u-nu-latn', {year:'numeric',month:'long',day:'numeric'});
+  return `
+  <div class="page">
+    <div class="cover">
+      <img class="cover-logo" src="testlogo-w.png" alt="وزارة التعليم" onerror="this.style.display=\'none\'">
+      <div class="cover-divider"></div>
+      <div class="cover-title">تقرير تحليل نتائج<br>الاختبارات التشخيصية</div>
+      <div class="cover-subtitle">الفصل الدراسي الثالث — العام الدراسي 1446هـ</div>
+      <div class="cover-school">ابتدائية عمر المختار | متوسطة اشبيلية | قطاع الخبر</div>
+      <div class="cover-badges">
+        <span class="cbadge">🏫 الصف السادس الابتدائي</span>
+        <span class="cbadge">🏫 الصف الثالث المتوسط</span>
+        <span class="cbadge">📍 قطاع الخبر</span>
+        <span class="cbadge">📋 30 سؤالاً</span>
+      </div>
+      <div class="cover-stats">
+        <div class="cstat">
+          <div class="cstat-val">${g6.total_students}</div>
+          <div class="cstat-lbl">طالب — الصف السادس</div>
+        </div>
+        <div class="cstat">
+          <div class="cstat-val">${g9.total_students}</div>
+          <div class="cstat-lbl">طالب — الصف التاسع</div>
+        </div>
+        <div class="cstat">
+          <div class="cstat-val">${g6.total_students + g9.total_students}</div>
+          <div class="cstat-lbl">إجمالي الطلاب</div>
+        </div>
+      </div>
+      <div class="cover-date">تاريخ الإصدار: ${date}</div>
+    </div>
+  </div>`;
 }
 
-function getSubjectTagCls(s) {
-  if (s === 'arabic') return 'q-tag subj-arabic';
-  if (s === 'science') return 'q-tag subj-science';
-  return 'q-tag subj-unnamed';
-}
-
-function switchGrade(grade) {
-  currentGrade = grade;
-  currentSubject = 'all';
-  document.querySelectorAll('.grade-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + grade).classList.add('active');
-  document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sbtn-all').classList.add('active');
-  render();
-}
-
-function filterSubject(subj) {
-  currentSubject = subj;
-  document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sbtn-' + subj).classList.add('active');
-  renderQuestions();
-  renderOverviewTable();
-}
-
-function render() {
-  renderKPIs();
-  renderCharts();
-  renderOverviewTable();
-  renderQuestions();
-}
-
-function renderKPIs() {
-  const d = ALL_DATA[currentGrade];
-  const questions = d.questions;
-  const avgDiff = (questions.reduce((s, q) => s + q.difficulty, 0) / questions.length).toFixed(1);
-  const maxQ = questions.reduce((a, b) => a.difficulty > b.difficulty ? a : b);
-  const minQ = questions.reduce((a, b) => a.difficulty < b.difficulty ? a : b);
-  
-  const kpis = [
-    {icon: '👨‍🎓', iconCls: 'blue', value: d.total_students, label: 'إجمالي الطلاب', sub: d.school_types[0]},
-    {icon: '📊', iconCls: 'green', value: d.avg_score + '/30', label: 'متوسط الدرجة', sub: 'من أصل 30 سؤالاً'},
-    {icon: '🎯', iconCls: 'teal', value: avgDiff + '%', label: 'متوسط نسبة الإجابة الصحيحة', sub: 'على جميع الأسئلة'},
-    {icon: '✅', iconCls: 'green', value: maxQ.difficulty + '%', label: 'أعلى نسبة إجابة صحيحة', sub: 'السؤال: Q' + maxQ.index},
-    {icon: '⚠️', iconCls: 'orange', value: minQ.difficulty + '%', label: 'أدنى نسبة إجابة صحيحة', sub: 'السؤال: Q' + minQ.index},
+function renderSummary(){
+  const grades = [
+    {key:'grade6', label:'الصف السادس الابتدائي', cls:'g6', emoji:'📚'},
+    {key:'grade9', label:'الصف الثالث المتوسط',  cls:'g9', emoji:'📘'}
   ];
-  
-  document.getElementById('kpiGrid').innerHTML = kpis.map(k => `
-    <div class="kpi-card">
-      <div class="kpi-icon ${k.iconCls}">${k.icon}</div>
-      <div>
-        <div class="kpi-value">${k.value}</div>
-        <div class="kpi-label">${k.label}</div>
-        <div class="kpi-sub">${k.sub}</div>
+
+  const cards = grades.map(g=>{
+    const d = ALL_DATA[g.key];
+    const qs = d.questions;
+    const avg = (qs.reduce((s,q)=>s+q.difficulty,0)/qs.length).toFixed(1);
+    const easy = qs.filter(q=>q.difficulty>=75).length;
+    const med  = qs.filter(q=>q.difficulty>=45&&q.difficulty<75).length;
+    const hard = qs.filter(q=>q.difficulty<45).length;
+    const arAvg = subjAvg(qs,'arabic');
+    const mathAvg = subjAvg(qs,'unnamed');
+    const sciAvg = subjAvg(qs,'science');
+
+    return `
+    <div class="gcard">
+      <div class="gcard-hdr ${g.cls}">
+        <span style="font-size:1.4rem">${g.emoji}</span>
+        <h3>${g.label}</h3>
+      </div>
+      <div class="gcard-body">
+        <div class="stat-row"><span class="stat-lbl">إجمالي الطلاب</span><span class="stat-val">${d.total_students} طالب</span></div>
+        <div class="stat-row"><span class="stat-lbl">متوسط الدرجة</span><span class="stat-val">${d.avg_score} / 30</span></div>
+        <div class="stat-row"><span class="stat-lbl">متوسط الإجابة الصحيحة</span><span class="stat-val">${avg}%</span></div>
+        <div class="stat-row"><span class="stat-lbl">المدرسة</span><span class="stat-val">${d.schools[0]}</span></div>
+        <div class="diff-pills">
+          <span class="pill easy">✅ سهل: ${easy}</span>
+          <span class="pill med">⚡ متوسط: ${med}</span>
+          <span class="pill hard">⚠ صعب: ${hard}</span>
+        </div>
+        <div class="subj-bars">
+          <div class="subj-bar-row">
+            <span class="subj-bar-lbl">اللغة العربية</span>
+            <div class="subj-bar-track"><div class="subj-bar-fill" style="width:${arAvg}%;background:#1e5f8a"></div></div>
+            <span class="subj-bar-pct">${arAvg}%</span>
+          </div>
+          <div class="subj-bar-row">
+            <span class="subj-bar-lbl">الرياضيات</span>
+            <div class="subj-bar-track"><div class="subj-bar-fill" style="width:${mathAvg}%;background:#6c4dbf"></div></div>
+            <span class="subj-bar-pct">${mathAvg}%</span>
+          </div>
+          <div class="subj-bar-row">
+            <span class="subj-bar-lbl">العلوم</span>
+            <div class="subj-bar-track"><div class="subj-bar-fill" style="width:${sciAvg}%;background:#27a062"></div></div>
+            <span class="subj-bar-pct">${sciAvg}%</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="page">
+    <div class="sec-hdr">
+      <span class="sec-hdr-icon">📊</span>
+      <div class="sec-hdr-text">
+        <h2>الملخص التنفيذي</h2>
+        <p>نظرة عامة على أداء الطلاب في الاختبارات التشخيصية</p>
       </div>
     </div>
-  `).join('');
-  
-  // Header stats
-  document.getElementById('headerStats').innerHTML = `
-    <div class="header-stat">
-      <div class="header-stat-val">${d.total_students}</div>
-      <div class="header-stat-lbl">طالب</div>
+    <div class="sec-body">
+      <div class="grade-cards">${cards}</div>
     </div>
-    <div class="header-stat">
-      <div class="header-stat-val">30</div>
-      <div class="header-stat-lbl">سؤال</div>
+    <div class="report-footer">
+      <p>وزارة التعليم — إدارة التعليم بالشرقية — قطاع الخبر</p>
+      <p>الفصل الدراسي الثالث 1446هـ</p>
     </div>
-    <div class="header-stat">
-      <div class="header-stat-val">${avgDiff}%</div>
-      <div class="header-stat-lbl">متوسط الصواب</div>
-    </div>
-  `;
+  </div>`;
 }
 
-function renderCharts() {
-  const d = ALL_DATA[currentGrade];
-  
-  // Histogram
-  const histLabels = d.score_histogram.map(b => b.label);
-  const histCounts = d.score_histogram.map(b => b.count);
-  
-  if (histChartObj) histChartObj.destroy();
-  histChartObj = new Chart(document.getElementById('histChart'), {
-    type: 'bar',
-    data: {
-      labels: histLabels,
-      datasets: [{
-        label: 'عدد الطلاب',
-        data: histCounts,
-        backgroundColor: 'rgba(30,95,138,0.7)',
-        borderColor: 'rgba(30,95,138,0.9)',
-        borderWidth: 1,
-        borderRadius: 6,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { rtl: true, callbacks: { title: t => 'الدرجة: ' + t[0].label } }
-      },
-      scales: {
-        x: { 
-          grid: { display: false },
-          ticks: { font: { family: 'Tajawal', size: 12 } }
-        },
-        y: { 
-          ticks: { font: { family: 'Tajawal', size: 12 }, stepSize: 1 },
-          grid: { color: 'rgba(0,0,0,0.05)' }
-        }
-      }
-    }
-  });
-  
-  // Difficulty by subject
-  const subjects = ['arabic', 'unnamed', 'science'];
-  const subjLabels = ['اللغة العربية', 'الرياضيات', 'العلوم'];
-  const subjDiffs = subjects.map(s => {
-    const qs = d.questions.filter(q => q.subject === s);
-    return qs.length ? (qs.reduce((sum, q) => sum + q.difficulty, 0) / qs.length).toFixed(1) : 0;
-  });
-  
-  if (diffChartObj) diffChartObj.destroy();
-  diffChartObj = new Chart(document.getElementById('diffChart'), {
-    type: 'bar',
-    data: {
-      labels: subjLabels,
-      datasets: [{
-        label: 'متوسط نسبة الإجابة الصحيحة %',
-        data: subjDiffs,
-        backgroundColor: [
-          'rgba(30,95,138,0.7)',
-          'rgba(108,77,191,0.7)',
-          'rgba(39,160,98,0.7)',
-        ],
-        borderColor: [
-          'rgba(30,95,138,0.9)',
-          'rgba(108,77,191,0.9)',
-          'rgba(39,160,98,0.9)',
-        ],
-        borderWidth: 1,
-        borderRadius: 8,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.parsed.y + '%' } }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 13 } } },
-        y: { 
-          min: 0, max: 100,
-          ticks: { font: { family: 'Tajawal', size: 12 }, callback: v => v + '%' },
-          grid: { color: 'rgba(0,0,0,0.05)' }
-        }
-      }
-    }
-  });
-}
+function renderGradeTable(gKey){
+  const d = ALL_DATA[gKey];
+  const qs = d.questions;
+  const sorted = [...qs].sort((a,b)=>b.difficulty-a.difficulty);
+  const topIdxs = new Set(sorted.slice(0,3).map(q=>q.index));
+  const botIdxs = new Set(sorted.slice(-3).map(q=>q.index));
 
-function renderOverviewTable() {
-  const d = ALL_DATA[currentGrade];
-  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => q.subject === currentSubject);
-  
-  const rows = questions.map(q => {
-    const lvl = getDiffLevel(q.difficulty);
-    const color = getDiffColor(q.difficulty);
-    const shortQ = q.is_named ? (q.question.length > 55 ? q.question.substring(0, 55) + '…' : q.question) : q.question;
-    return `<tr>
-      <td><span class="q-num-badge">${q.index}</span></td>
-      <td style="max-width:300px;font-size:0.88rem;">${shortQ}</td>
-      <td><span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span></td>
-      <td>${q.total}</td>
+  const rows = qs.map(q=>{
+    const lv = diffLevel(q.difficulty);
+    const rowCls = topIdxs.has(q.index) ? 'easy-row' : botIdxs.has(q.index) ? 'hard-row' : '';
+    const qShort = q.is_named ? (q.question.length>65 ? q.question.substring(0,65)+'…' : q.question) : '📐 سؤال رياضيات #'+q.index;
+    return `<tr class="${rowCls}">
+      <td><span class="num-badge">${q.index}</span></td>
+      <td style="max-width:280px">${qShort}</td>
+      <td><span class="subj-tag ${SUBJ_CLS[q.subject]}">${SUBJ_MAP[q.subject]}</span></td>
+      <td style="font-family:Cairo;font-weight:700">${q.total}</td>
       <td>
-        <div style="display:flex;align-items:center;gap:0.6rem;">
-          <div class="diff-bar-wrap">
-            <div class="diff-bar"><div class="diff-bar-fill" style="width:${q.difficulty}%;background:${color};"></div></div>
-          </div>
-          <span style="font-family:Cairo;font-weight:800;font-size:0.95rem;color:${color};">${q.difficulty}%</span>
+        <div class="bar-cell">
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:${q.difficulty}%;background:${lv.color}"></div></div>
+          <span class="pct-txt" style="color:${lv.color}">${q.difficulty}%</span>
         </div>
       </td>
-      <td><span class="diff-tag ${lvl.cls}">${lvl.label}</span></td>
-      <td style="font-family:Cairo;font-weight:800;font-size:0.85rem;color:${color};">${q.difficulty >= 75 ? 'سهل (≥75%)' : q.difficulty >= 45 ? 'متوسط (45-74%)' : 'صعب (<45%)'}</td>
+      <td><span class="diff-tag ${lv.cls}">${lv.label}</span></td>
     </tr>`;
   }).join('');
-  
-  document.getElementById('overviewBody').innerHTML = rows;
+
+  const gradeLabel = gKey==='grade6' ? 'الصف السادس الابتدائي' : 'الصف الثالث المتوسط';
+  const emoji = gKey==='grade6' ? '📚' : '📘';
+
+  return `
+  <div class="page">
+    <div class="sec-hdr">
+      <span class="sec-hdr-icon">${emoji}</span>
+      <div class="sec-hdr-text">
+        <h2>تحليل بنود الأسئلة — ${gradeLabel}</h2>
+        <p>${d.schools[0]} | ${d.sectors[0]} | ${d.total_students} طالب | متوسط الدرجة: ${d.avg_score}/30</p>
+      </div>
+    </div>
+    <div class="sec-body">
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;font-size:.82rem;color:#718096">
+        <span style="background:#f0fbf5;padding:.2rem .7rem;border-radius:6px;font-weight:700;color:#27a062">✅ الأعلى أداءً (أفضل 3)</span>
+        <span style="background:#fff5f5;padding:.2rem .7rem;border-radius:6px;font-weight:700;color:#c0392b">⚠ الأصعب (أدنى 3)</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>السؤال</th><th>المادة</th><th>المجيبون</th><th>نسبة الصواب</th><th>المستوى</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="report-footer">
+      <p>${gradeLabel} — ${d.schools[0]} — قطاع الخبر</p>
+      <p>جميع الأرقام مستخرجة من بيانات الاختبار الفعلية</p>
+    </div>
+  </div>`;
 }
 
-function renderQuestions() {
-  const d = ALL_DATA[currentGrade];
-  const questions = currentSubject === 'all' ? d.questions : d.questions.filter(q => q.subject === currentSubject);
-  
-  const sections = {arabic: [], unnamed: [], science: []};
-  questions.forEach(q => sections[q.subject].push(q));
-  
-  let html = '';
-  
-  const secDefs = [
-    {key: 'arabic', title: 'اللغة العربية', icon: 'arabic', emoji: '📖'},
-    {key: 'unnamed', title: 'الرياضيات', icon: 'unnamed', emoji: '📐'},
-    {key: 'science', title: 'العلوم', icon: 'science', emoji: '🔬'},
-  ];
-  
-  secDefs.forEach(sec => {
-    const qs = sections[sec.key];
-    if (!qs.length) return;
-    
-    html += `<div class="section-title"><span class="sec-icon ${sec.icon}">${sec.emoji}</span>${sec.title} (${qs.length} سؤال)</div>`;
-    html += '<div class="questions-grid">';
-    
-    qs.forEach(q => {
-      const lvl = getDiffLevel(q.difficulty);
-      const color = getDiffColor(q.difficulty);
-      
-      html += `<div class="q-card">
-        <div class="q-header">
-          <div class="q-num">${q.index}</div>
-          <div style="flex:1;">
-            <div class="q-text ${q.is_named ? '' : 'unnamed-q'}">${q.is_named ? q.question : '📐 سؤال رياضيات — رقم السؤال: ' + q.index}</div>
-            <div class="q-meta">
-              <span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span>
-              <span class="diff-tag ${lvl.cls}">${lvl.label}: ${q.difficulty}%</span>
-              <span class="q-tag" style="background:rgba(30,95,138,0.08);color:var(--text-2);">المجيبون: ${q.total} طالب</span>
-            </div>
-          </div>
+function renderCritical(gKey){
+  const d = ALL_DATA[gKey];
+  const hardQs = [...d.questions].filter(q=>q.difficulty<45).sort((a,b)=>a.difficulty-b.difficulty);
+  if(!hardQs.length) return '';
+
+  const gradeLabel = gKey==='grade6' ? 'الصف السادس الابتدائي' : 'الصف الثالث المتوسط';
+  const emoji = gKey==='grade6' ? '📚' : '📘';
+
+  const qCards = hardQs.map(q=>{
+    const lv = diffLevel(q.difficulty);
+    const opts = q.options.map(opt=>`
+      <div class="opt ${opt.is_correct?'correct':''}">
+        <div class="opt-row">
+          <div class="opt-icon ${opt.is_correct?'ok':'no'}">${opt.is_correct?'✓':'✗'}</div>
+          <div class="opt-ans ${opt.is_correct?'ok':''}">${opt.answer}</div>
+          <div class="opt-stats ${opt.is_correct?'ok':''}">${opt.percentage}% (${opt.count})</div>
         </div>
-        <div class="q-body">
-          <div class="difficulty-row">
-            <span class="diff-label">نسبة الإجابة الصحيحة:</span>
-            <div class="diff-track"><div class="diff-track-fill" style="width:${q.difficulty}%;background:${color};"></div></div>
-            <span class="diff-pct" style="color:${color};">${q.difficulty}%</span>
-          </div>
-          <div class="options-list">
-            ${q.options.map(opt => `
-              <div class="option-item ${opt.is_correct ? 'correct' : 'wrong'}">
-                <div class="option-row">
-                  <div class="option-icon ${opt.is_correct ? 'correct' : 'wrong'}">${opt.is_correct ? '✓' : '✗'}</div>
-                  <div class="option-answer ${opt.is_correct ? 'correct' : ''}">${opt.answer}</div>
-                  <div class="option-stats">
-                    <span class="option-count">(${opt.count})</span>
-                    <span class="option-pct ${opt.is_correct ? 'correct' : 'wrong'}">${opt.percentage}%</span>
-                  </div>
-                </div>
-                <div class="option-bar-wrap">
-                  <div class="option-bar ${opt.is_correct ? 'bar-correct' : 'bar-wrong'}" style="width:${opt.percentage}%;"></div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>`;
-    });
-    
-    html += '</div>';
-  });
-  
-  document.getElementById('questionsContainer').innerHTML = html;
+        <div class="opt-bar-wrap"><div class="opt-bar ${opt.is_correct?'bar-ok':'bar-no'}" style="width:${opt.percentage}%"></div></div>
+      </div>`).join('');
+
+    return `
+    <div class="q-card">
+      <div class="q-card-hdr">
+        <div class="q-num">${q.index}</div>
+        <div class="q-text">${q.is_named?q.question:'📐 سؤال رياضيات #'+q.index}</div>
+      </div>
+      <div class="q-diff-bar-wrap">
+        <span class="q-diff-label">نسبة الإجابة الصحيحة:</span>
+        <div class="q-diff-track"><div class="q-diff-fill" style="width:${q.difficulty}%;background:${lv.color}"></div></div>
+        <span class="q-diff-pct" style="color:${lv.color}">${q.difficulty}%</span>
+        <span class="diff-tag ${lv.cls}" style="margin-right:.5rem">${lv.label}</span>
+      </div>
+      <div class="opts">${opts}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="page">
+    <div class="sec-hdr">
+      <span class="sec-hdr-icon">⚠️</span>
+      <div class="sec-hdr-text">
+        <h2>الأسئلة الحرجة — ${gradeLabel}</h2>
+        <p>الأسئلة ذات الصعوبة العالية (نسبة إجابة صحيحة أقل من 45%)</p>
+      </div>
+    </div>
+    <div class="sec-body">
+      <div class="crit-section">
+        <div class="crit-title">تحليل تفصيلي للأسئلة الصعبة — ${gradeLabel}</div>
+        ${qCards}
+      </div>
+    </div>
+    <div class="report-footer">
+      <p>يُنصح بمراجعة هذه الأسئلة وتعزيز تدريس المفاهيم المرتبطة بها</p>
+      <p>${gradeLabel} — قطاع الخبر — 1446هـ</p>
+    </div>
+  </div>`;
 }
 
-// Initialize
+function render(){
+  const el = document.getElementById('report');
+  el.innerHTML =
+    renderCover() +
+    renderSummary() +
+    renderGradeTable('grade6') +
+    renderCritical('grade6') +
+    renderGradeTable('grade9') +
+    renderCritical('grade9');
+}
+
 render();
 </script>
 </body>
