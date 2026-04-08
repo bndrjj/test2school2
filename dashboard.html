@@ -298,6 +298,42 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 .signature-title { color: var(--text-3); font-size: 0.78rem; font-weight: 700; }
 .signature-name { color: var(--primary-dark); font-size: 0.95rem; font-weight: 800; margin-top: 0.25rem; }
 
+/* ===================== PRINT DETAIL ===================== */
+.pr-detail{display:none}
+.pdf-export .pr-detail{display:block}
+@media print{.pr-detail{display:block!important}}
+.pr-det-body{padding:.8rem 1.6rem 1rem;border-top:1.5px solid var(--border)}
+.pr-sec-hdr{font-family:'Cairo',sans-serif;font-size:.92rem;font-weight:800;color:var(--primary-dark);margin-bottom:.6rem;padding-bottom:.3rem;border-bottom:2px solid var(--border)}
+.pr-subj-row{display:grid;grid-template-columns:110px 1fr 50px 72px;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.pr-subj-label{font-size:.82rem;font-weight:700;color:var(--text)}
+.pr-subj-bw{height:9px;background:rgba(30,95,138,.1);border-radius:5px;overflow:hidden}
+.pr-subj-b{height:100%;border-radius:5px}
+.pr-subj-pct{font-family:'Cairo',sans-serif;font-size:.83rem;font-weight:800;text-align:center}
+.pr-tbl{width:100%;border-collapse:collapse;margin-bottom:.5rem}
+.pr-tbl th,.pr-tbl td{border:1px solid rgba(30,95,138,.13);padding:.38rem .55rem;text-align:right;font-size:.78rem}
+.pr-tbl th{background:#eef4fa;color:var(--primary-dark);font-weight:700}
+.pr-sec-title{font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:800;color:var(--primary-dark);padding:.35rem .55rem;margin:.55rem 0 .35rem;background:var(--surface-2);border-radius:7px;display:flex;align-items:center;gap:.4rem;border-right:3px solid var(--primary)}
+.pr-q{border:1px solid var(--border);border-radius:9px;padding:.5rem .65rem;margin-bottom:.45rem;background:var(--surface);page-break-inside:avoid}
+.pr-q-hdr{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.28rem}
+.pr-q-num{width:22px;height:22px;border-radius:6px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.pr-q-info{flex:1}
+.pr-q-txt{font-size:.81rem;font-weight:600;color:var(--text);line-height:1.42;margin-bottom:.18rem}
+.pr-q-meta{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center}
+.pr-q-pct{font-family:'Cairo',sans-serif;font-size:.95rem;font-weight:800;flex-shrink:0}
+.pr-bar-track{height:5px;background:rgba(30,95,138,.1);border-radius:3px;overflow:hidden;margin-bottom:.3rem}
+.pr-bar-fill{height:100%;border-radius:3px}
+.pr-opts{display:grid;gap:.2rem}
+.pr-opt{display:grid;grid-template-columns:16px 1fr 68px 30px;align-items:center;gap:.3rem;padding:.2rem .28rem;border-radius:5px;font-size:.75rem}
+.pr-opt.ok{background:var(--success-light)}
+.pr-opt-ic{width:15px;height:15px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800}
+.pr-opt.ok .pr-opt-ic{background:var(--success);color:#fff}
+.pr-opt:not(.ok) .pr-opt-ic{background:rgba(30,95,138,.1);color:var(--text-3)}
+.pr-opt-ans{font-size:.75rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-opt.ok .pr-opt-ans{font-weight:700;color:var(--success)}
+.pr-opt-bw{height:4px;background:rgba(30,95,138,.07);border-radius:3px;overflow:hidden}
+.pr-opt-b{height:100%;border-radius:3px}
+.pr-opt-pct{font-family:'Cairo',sans-serif;font-size:.73rem;font-weight:800;color:var(--text-2);text-align:center}
+.pr-opt-pct.ok{color:var(--success)}
 @media print {
   body { background: #fff; }
   .header, .kpi-grid, .charts-row, .overview-card, .subject-filter, .questions-section, .footer, .report-actions { display: none !important; }
@@ -642,6 +678,21 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
         </div>
       </div>
     </div>
+    <div class="pr-detail pr-det-body">
+      <div class="pr-sec-hdr">📊 أداء المواد الدراسية</div>
+      <div id="reportSubjectBars"></div>
+    </div>
+    <div class="pr-detail pr-det-body" style="page-break-before:always">
+      <div class="pr-sec-hdr">📋 جدول تحليل جميع البنود</div>
+      <table class="pr-tbl">
+        <thead><tr><th>#</th><th>السؤال</th><th>المادة</th><th>المجيبون</th><th>نسبة الصواب</th><th>المستوى</th></tr></thead>
+        <tbody id="reportQTBody"></tbody>
+      </table>
+    </div>
+    <div class="pr-detail pr-det-body">
+      <div class="pr-sec-hdr">🔍 التحليل التفصيلي للبنود</div>
+      <div id="reportQDetail"></div>
+    </div>
   </div>
 
   <!-- KPI CARDS -->
@@ -764,6 +815,38 @@ function renderPrintReport() {
   const liHtml = (q,cls) => `<li><span class="mini-badge">${q.index}</span><span>${qLabel(q)}</span><span class="mini-score ${cls}">${q.difficulty}%</span></li>`;
   document.getElementById('hardestQuestionsList').innerHTML = topHard.map(q=>liHtml(q,'warn')).join('');
   document.getElementById('easiestQuestionsList').innerHTML = topEasy.map(q=>liHtml(q,'good')).join('');
+
+  // Subject bars
+  const subjColors = {arabic:'var(--primary)',unnamed:'#6c4dbf',science:'var(--success)'};
+  document.getElementById('reportSubjectBars').innerHTML = ['arabic','unnamed','science'].map(s=>{
+    const qs=d.questions.filter(q=>q.subject===s);
+    if(!qs.length) return '';
+    const avg=(qs.reduce((sum,q)=>sum+q.difficulty,0)/qs.length).toFixed(1);
+    const lvl=getDiffLevel(parseFloat(avg));
+    return `<div class="pr-subj-row"><div class="pr-subj-label">${getSubjectLabel(s)}</div><div class="pr-subj-bw"><div class="pr-subj-b" style="width:${avg}%;background:${subjColors[s]};"></div></div><span class="pr-subj-pct" style="color:${subjColors[s]};">${avg}%</span><span class="diff-tag ${lvl.cls}">${lvl.label}</span></div>`;
+  }).join('');
+
+  // Questions overview table
+  document.getElementById('reportQTBody').innerHTML = questions.map(q=>{
+    const lvl=getDiffLevel(q.difficulty), color=getDiffColor(q.difficulty);
+    const shortQ=q.is_named?(q.question.length>50?q.question.slice(0,50)+'…':q.question):`سؤال رياضيات ${q.index}`;
+    return `<tr><td><span class="q-num-badge">${q.index}</span></td><td style="font-size:.77rem;">${shortQ}</td><td><span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span></td><td>${q.total}</td><td><span style="font-family:Cairo;font-weight:800;font-size:.82rem;color:${color};">${q.difficulty}%</span></td><td><span class="diff-tag ${lvl.cls}">${lvl.label}</span></td></tr>`;
+  }).join('');
+
+  // Detailed question cards grouped by subject
+  const secs={arabic:[],unnamed:[],science:[]};
+  questions.forEach(q=>secs[q.subject].push(q));
+  document.getElementById('reportQDetail').innerHTML=[
+    {key:'arabic',title:'اللغة العربية',emoji:'📖'},
+    {key:'unnamed',title:'الرياضيات',emoji:'📐'},
+    {key:'science',title:'العلوم',emoji:'🔬'},
+  ].filter(s=>secs[s.key].length).map(s=>`
+    <div class="pr-sec-title"><span>${s.emoji}</span>${s.title} (${secs[s.key].length} بند)</div>
+    ${secs[s.key].map(q=>{
+      const lvl=getDiffLevel(q.difficulty), color=getDiffColor(q.difficulty);
+      const qtxt=q.is_named?(q.question.length>80?q.question.slice(0,80)+'…':q.question):`📐 سؤال رياضيات — رقم ${q.index}`;
+      return `<div class="pr-q"><div class="pr-q-hdr"><span class="pr-q-num">${q.index}</span><div class="pr-q-info"><div class="pr-q-txt">${qtxt}</div><div class="pr-q-meta"><span class="${getSubjectTagCls(q.subject)}">${getSubjectLabel(q.subject)}</span><span class="diff-tag ${lvl.cls}">${lvl.label}: ${q.difficulty}%</span><span style="font-size:.73rem;color:var(--text-3);">المجيبون: ${q.total}</span></div></div><div class="pr-q-pct" style="color:${color};">${q.difficulty}%</div></div><div class="pr-bar-track"><div class="pr-bar-fill" style="width:${q.difficulty}%;background:${color};"></div></div><div class="pr-opts">${q.options.map(o=>`<div class="pr-opt ${o.is_correct?'ok':''}"><span class="pr-opt-ic">${o.is_correct?'✓':'✗'}</span><span class="pr-opt-ans">${o.answer}</span><div class="pr-opt-bw"><div class="pr-opt-b ${o.is_correct?'bar-correct':'bar-wrong'}" style="width:${o.percentage}%;"></div></div><span class="pr-opt-pct ${o.is_correct?'ok':''}">${o.percentage}%</span></div>`).join('')}</div></div>`;
+    }).join('')}`).join('');
 }
 
 function printProfessionalReport() {
