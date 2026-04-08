@@ -556,13 +556,13 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1rem;">
         <div class="header-stats" id="headerStats"><!-- filled by JS --></div>
-        <a href="print-report.html" target="_blank" class="export-btn">
+        <button class="export-btn" onclick="headerExportPDF(event)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
             <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/>
           </svg>
           تصدير PDF / طباعة
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -766,11 +766,21 @@ function renderPrintReport() {
   document.getElementById('easiestQuestionsList').innerHTML = topEasy.map(q=>liHtml(q,'good')).join('');
 }
 
-function printProfessionalReport() { window.print(); }
+function printProfessionalReport() {
+  if (!currentData) { alert('يرجى رفع ملف Excel أولاً لتحليل بيانات المدرسة'); return; }
+  renderPrintReport();
+  window.print();
+}
+
+function headerExportPDF(event) {
+  if (!currentData) { alert('يرجى رفع ملف Excel أولاً لتحليل بيانات المدرسة'); return; }
+  exportReportPDF(event);
+}
 
 async function exportReportPDF(event) {
   const btn = event?.currentTarget;
-  if (btn) { btn.disabled=true; btn.textContent='⏳ جاري تجهيز ملف PDF...'; }
+  const origHTML = btn?.innerHTML;
+  if (btn) { btn.disabled=true; btn.innerHTML='⏳ جاري تجهيز ملف PDF...'; }
   try {
     document.body.classList.add('pdf-export');
     renderPrintReport();
@@ -786,7 +796,7 @@ async function exportReportPDF(event) {
     alert('تعذر إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
   } finally {
     document.body.classList.remove('pdf-export');
-    if (btn) { btn.disabled=false; btn.textContent='📄 تصدير PDF احترافي'; }
+    if (btn) { btn.disabled=false; btn.innerHTML=origHTML||'📄 تصدير PDF / طباعة'; }
   }
 }
 
