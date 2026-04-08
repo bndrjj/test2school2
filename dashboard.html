@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root {
   --primary: #1e5f8a;
@@ -519,6 +520,56 @@ body.pdf-export .signature-name { font-size: 0.82rem; margin-top: 0.12rem; }
 /* Hidden class */
 .hidden { display: none !important; }
 
+/* ===================== UPLOAD ZONE ===================== */
+.upload-zone {
+  background: var(--surface);
+  border: 2px dashed rgba(30,95,138,0.25);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  transition: border-color 0.2s, background 0.2s;
+}
+.upload-zone.dragover { border-color: var(--primary); background: rgba(30,95,138,0.04); }
+.upload-zone-icon { font-size: 2.2rem; line-height: 1; }
+.upload-zone-text { flex: 1; min-width: 180px; }
+.upload-zone-text strong { font-family: 'Cairo', sans-serif; font-size: 1rem; color: var(--text); display: block; }
+.upload-zone-text span { font-size: 0.84rem; color: var(--text-3); }
+.upload-trigger-btn {
+  background: linear-gradient(135deg, #27a062, #33c47a);
+  color: #fff; border: none; border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(39,160,98,0.32);
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+.upload-trigger-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39,160,98,0.45); }
+.upload-status { margin-top: 0.75rem; width: 100%; }
+.upload-loading { color: var(--text-2); font-size: 0.9rem; font-weight: 600; padding: 0.5rem 0; }
+.upload-success-bar {
+  display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+  background: var(--success-light); border: 1px solid rgba(39,160,98,0.28);
+  border-radius: var(--radius-sm); padding: 0.65rem 1rem;
+  font-size: 0.88rem; color: #1a6640; font-weight: 600;
+}
+.upload-success-bar .reset-upload-btn {
+  margin-right: auto; background: none; border: 1.5px solid rgba(39,160,98,0.4);
+  border-radius: 999px; padding: 0.25rem 0.8rem;
+  font-family: 'Cairo', sans-serif; font-size: 0.82rem; font-weight: 700;
+  color: #1a6640; cursor: pointer; transition: all 0.15s;
+}
+.upload-success-bar .reset-upload-btn:hover { background: rgba(39,160,98,0.12); }
+.upload-error-bar {
+  background: var(--danger-light); border: 1px solid rgba(192,57,43,0.25);
+  border-radius: var(--radius-sm); padding: 0.65rem 1rem;
+  font-size: 0.88rem; color: var(--danger); font-weight: 600;
+}
+@media print { .upload-zone { display: none !important; } }
+
 /* ---- PDF EXPORT BUTTON ---- */
 .export-btn {
   display: inline-flex; align-items: center; gap: .55rem;
@@ -544,8 +595,8 @@ body.pdf-export .signature-name { font-size: 0.82rem; margin-top: 0.12rem; }
       </div>
       <div class="header-text">
         <div class="header-title">لوحة تحليل نتائج الاختبارات التشخيصية</div>
-        <div class="header-subtitle">  • قطاع الخبر</div>
-        <div class="header-badges">
+        <div class="header-subtitle" id="headerSubtitle">  • قطاع الخبر</div>
+        <div class="header-badges" id="headerBadges">
           <span class="header-badge">🏫 الصف السادس الابتدائي</span>
           <span class="header-badge">🏫 الصف الثالث المتوسط</span>
           <span class="header-badge">📍 قطاع الخبر</span>
@@ -564,8 +615,20 @@ body.pdf-export .signature-name { font-size: 0.82rem; margin-top: 0.12rem; }
     </div>
   </div>
 
+  <!-- EXCEL UPLOAD ZONE -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFileUpload(event)">
+    <div class="upload-zone-icon">📊</div>
+    <div class="upload-zone-text">
+      <strong>رفع ملف Excel لتحليل بيانات مدرستك</strong>
+      <span>ارفع ملف بنفس تنسيق ملفات البيانات للحصول على تحليل فوري مع إمكانية الطباعة وتصدير PDF</span>
+    </div>
+    <button class="upload-trigger-btn" onclick="document.getElementById('fileInput').click()">📂 رفع ملف Excel</button>
+    <div class="upload-status hidden" id="uploadStatus"></div>
+  </div>
+
   <!-- GRADE TABS -->
-  <div class="grade-tabs">
+  <div class="grade-tabs" id="gradeTabsContainer">
     <button class="grade-tab active" onclick="switchGrade('grade6')" id="tab-grade6">
       📚 الصف السادس الابتدائي
     </button>
@@ -744,6 +807,7 @@ function filterSubject(subj) {
 }
 
 function render() {
+  renderHeader();
   renderPrintReport();
   renderKPIs();
   renderCharts();
@@ -780,7 +844,7 @@ function renderPrintReport() {
     </div>
     <div class="report-summary-item">
       <div class="report-summary-label">متوسط درجة الاختبار</div>
-      <div class="report-summary-value">${d.avg_score}/30</div>
+      <div class="report-summary-value">${d.avg_score}/${d.total_questions}</div>
     </div>
     <div class="report-summary-item">
       <div class="report-summary-label">متوسط نسبة الصواب</div>
@@ -876,7 +940,7 @@ function renderKPIs() {
   
   const kpis = [
     {icon: '👨‍🎓', iconCls: 'blue', value: d.total_students, label: 'إجمالي الطلاب', sub: d.school_types[0]},
-    {icon: '📊', iconCls: 'green', value: d.avg_score + '/30', label: 'متوسط الدرجة', sub: 'من أصل 30 سؤالاً'},
+    {icon: '📊', iconCls: 'green', value: d.avg_score + '/' + d.total_questions, label: 'متوسط الدرجة', sub: `من أصل ${d.total_questions} سؤالاً`},
     {icon: '🎯', iconCls: 'teal', value: avgDiff + '%', label: 'متوسط نسبة الإجابة الصحيحة', sub: 'على جميع الأسئلة'},
     {icon: '✅', iconCls: 'green', value: maxQ.difficulty + '%', label: 'أعلى نسبة إجابة صحيحة', sub: 'السؤال: Q' + maxQ.index},
     {icon: '⚠️', iconCls: 'orange', value: minQ.difficulty + '%', label: 'أدنى نسبة إجابة صحيحة', sub: 'السؤال: Q' + minQ.index},
@@ -1097,6 +1161,171 @@ function renderQuestions() {
   
   document.getElementById('questionsContainer').innerHTML = html;
 }
+
+// =================== EXCEL UPLOAD ===================
+
+function parseExcelRows(rows) {
+  if (rows.length < 3) throw new Error('البيانات غير كافية في الملف');
+  const headers = rows[0].map(h => String(h || '').trim());
+  const data = rows.slice(1).filter(r => r.some(c => c !== '' && c != null));
+
+  const findCol = (kw) => headers.findIndex(h => h.includes(kw));
+  const totalCol = findCol('إجمالي');
+  const schoolTypeCol = findCol('نوع المدرسة');
+  const sectorCol = findCol('القطاع');
+  const schoolCol = headers.findIndex((h, i) => h.includes('اسم المدرسة') && !headers.slice(0, i).some(p => p.includes('اسم المدرسة')));
+
+  const qCols = headers.reduce((acc, h, i) => {
+    if (h.startsWith('النقاط') && i > 0) acc.push({qI: i - 1, pI: i, text: headers[i - 1]});
+    return acc;
+  }, []);
+  if (!qCols.length) throw new Error('لم يتم العثور على أسئلة في الملف — تأكد أن الملف يحتوي على أعمدة "النقاط"');
+
+  const mathRange = qCols.reduce((r, q, i) =>
+    /^Column/.test(q.text) ? {start: Math.min(r.start, i), end: Math.max(r.end, i)} : r,
+    {start: Infinity, end: -1}
+  );
+
+  const questions = qCols.map((qc, idx) => {
+    const isMath = /^Column/.test(qc.text);
+    const subject = isMath ? 'unnamed'
+      : (mathRange.start < Infinity && idx < mathRange.start) ? 'arabic' : 'science';
+
+    const answers = {};
+    let correct = 0, total = 0;
+    data.forEach(row => {
+      const ans = String(row[qc.qI] || '').trim();
+      const pts = Number(row[qc.pI]);
+      if (!ans) return;
+      total++;
+      if (pts === 1) { correct++; if (!answers[ans]) answers[ans] = {count: 0, isCorrect: false}; answers[ans].isCorrect = true; }
+      if (!answers[ans]) answers[ans] = {count: 0, isCorrect: false};
+      answers[ans].count++;
+    });
+
+    const difficulty = total > 0 ? Math.round(correct / total * 1000) / 10 : 0;
+    const options = Object.entries(answers)
+      .map(([ans, {count, isCorrect}]) => ({answer: ans, count, percentage: Math.round(count / total * 1000) / 10, is_correct: isCorrect}))
+      .sort((a, b) => b.count - a.count);
+
+    return {index: idx + 1, question: isMath ? '' : qc.text, is_named: !isMath, total, correct, difficulty, options, subject};
+  });
+
+  const uniq = (col) => [...new Set(data.map(r => String(r[col] || '')).filter(Boolean))];
+  const scores = data.map(r => Number(r[totalCol]) || 0);
+  const avgScore = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : 0;
+  const nQ = qCols.length;
+  const binSize = nQ <= 20 ? 2 : 5;
+  const histogram = Array.from({length: Math.ceil((nQ + 1) / binSize)}, (_, i) => {
+    const lo = i * binSize, hi = Math.min(lo + binSize - 1, nQ);
+    return {label: `${lo}-${hi}`, count: scores.filter(s => s >= lo && s <= hi).length};
+  });
+
+  const schools = uniq(schoolCol), sectors = uniq(sectorCol), types = uniq(schoolTypeCol);
+  return {
+    grade: (schools[0] || 'المدرسة') + (sectors[0] ? ' — ' + sectors[0] : ''),
+    total_students: data.length,
+    school_types: types, sectors, schools,
+    avg_score: parseFloat(avgScore),
+    total_questions: nQ,
+    score_histogram: histogram,
+    questions
+  };
+}
+
+function parseExcelFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(e.target.result, {type: 'array'});
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        resolve(parseExcelRows(XLSX.utils.sheet_to_json(ws, {header: 1, defval: ''})));
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = () => reject(new Error('تعذر قراءة الملف'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.className = 'upload-status';
+  statusEl.innerHTML = '<div class="upload-loading">⏳ جاري تحليل البيانات...</div>';
+
+  try {
+    const parsed = await parseExcelFile(file);
+    ALL_DATA['uploaded'] = parsed;
+    currentGrade = 'uploaded';
+    currentSubject = 'all';
+    updateGradeTabs();
+    renderHeader();
+    render();
+    statusEl.innerHTML = `
+      <div class="upload-success-bar">
+        ✅ تم التحليل بنجاح!
+        <strong>${parsed.schools[0] || '—'}</strong>
+        <span>• ${parsed.total_students} طالب • ${parsed.total_questions} سؤال • ${parsed.sectors[0] || ''}</span>
+        <button class="reset-upload-btn" onclick="resetUpload()">✕ إزالة الملف والعودة للبيانات الافتراضية</button>
+      </div>`;
+  } catch (err) {
+    statusEl.innerHTML = `<div class="upload-error-bar">❌ ${err.message}</div>`;
+    console.error(err);
+  }
+  event.target.value = '';
+}
+
+function resetUpload() {
+  delete ALL_DATA['uploaded'];
+  currentGrade = 'grade6';
+  currentSubject = 'all';
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.innerHTML = '';
+  statusEl.className = 'upload-status hidden';
+  updateGradeTabs();
+  renderHeader();
+  render();
+}
+
+function updateGradeTabs() {
+  const tabs = document.getElementById('gradeTabsContainer');
+  const uploaded = ALL_DATA['uploaded'];
+  const base = `
+    <button class="grade-tab${currentGrade === 'grade6' ? ' active' : ''}" onclick="switchGrade('grade6')" id="tab-grade6">📚 الصف السادس الابتدائي</button>
+    <button class="grade-tab${currentGrade === 'grade9' ? ' active' : ''}" onclick="switchGrade('grade9')" id="tab-grade9">📚 الصف الثالث المتوسط</button>`;
+  tabs.innerHTML = uploaded
+    ? base + `<button class="grade-tab${currentGrade === 'uploaded' ? ' active' : ''}" onclick="switchGrade('uploaded')" id="tab-uploaded">📊 ${uploaded.schools[0] || 'الملف المرفوع'}</button>`
+    : base;
+}
+
+function renderHeader() {
+  const d = ALL_DATA[currentGrade];
+  document.getElementById('headerSubtitle').textContent = '  • ' + (d.sectors.join('، ') || '');
+  document.getElementById('headerBadges').innerHTML =
+    d.schools.map(s => `<span class="header-badge">🏫 ${s}</span>`).join('') +
+    (d.sectors[0] ? `<span class="header-badge">📍 ${d.sectors[0]}</span>` : '') +
+    (d.school_types[0] ? `<span class="header-badge">👤 ${d.school_types[0]}</span>` : '');
+}
+
+// Drag and drop support
+(function() {
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && /\.(xlsx|xls)$/i.test(file.name)) {
+      const dt = new DataTransfer(); dt.items.add(file);
+      const inp = document.getElementById('fileInput'); inp.files = dt.files;
+      handleFileUpload({target: inp});
+    } else { document.getElementById('uploadStatus').innerHTML = '<div class="upload-error-bar">❌ يُقبل فقط ملفات Excel (.xlsx / .xls)</div>'; }
+  });
+})();
+
+// =================== END EXCEL UPLOAD ===================
 
 // Initialize
 render();
