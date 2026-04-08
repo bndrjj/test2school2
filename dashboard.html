@@ -88,6 +88,31 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 
 /* ===================== GRADE TABS ===================== */
 .grade-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: var(--surface); padding: 0.5rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+.school-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+.school-card {
+  border: 2px solid rgba(30,95,138,0.14);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 0.95rem 1rem;
+  font-family: 'Cairo', sans-serif;
+  font-weight: 800;
+  color: var(--text-2);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.school-card:hover { border-color: var(--primary-light); color: var(--primary); transform: translateY(-1px); }
+.school-card.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(30,95,138,0.24);
+}
 .grade-tab {
   flex: 1; padding: 0.85rem 1.5rem; border: none; border-radius: var(--radius-sm);
   font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
@@ -135,11 +160,72 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 .print-report {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 0;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   margin-bottom: 2rem;
+  overflow: hidden;
 }
+.report-brand-banner {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 48%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 1.2rem 1.5rem;
+  position: relative;
+}
+.report-brand-banner::after {
+  content: '';
+  position: absolute;
+  left: -18%;
+  top: -80%;
+  width: 60%;
+  height: 240%;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.12) 0%, transparent 72%);
+  pointer-events: none;
+}
+.brand-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+.brand-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-logo img { max-width: 60px; max-height: 60px; filter: brightness(0) invert(1); }
+.brand-title-main { font-family: 'Cairo', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.2rem; }
+.brand-title-sub { font-size: 0.9rem; color: rgba(255,255,255,0.9); }
+.brand-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.12);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+.report-klisha {
+  background: #f8fbff;
+  border-top: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.1rem;
+}
+.klisha-item { font-size: 0.84rem; color: var(--text-2); font-weight: 600; }
+.klisha-item strong { color: var(--primary-dark); font-family: 'Cairo', sans-serif; margin-inline-start: 0.25rem; }
+.report-body { padding: 1.4rem 1.6rem 1.6rem; }
 .print-head {
   display: flex;
   justify-content: space-between;
@@ -185,12 +271,77 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 }
 .report-table th { background: #eef4fa; color: var(--primary-dark); font-weight: 700; }
 .report-table td strong { color: var(--primary-dark); font-family: 'Cairo', sans-serif; }
+.report-analysis-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: 1fr 1fr;
+}
+.mini-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+.mini-card-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 0.55rem;
+}
+.mini-list { list-style: none; display: grid; gap: 0.5rem; }
+.mini-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 9px;
+  padding: 0.38rem 0.5rem;
+  background: #fff;
+}
+.mini-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--primary);
+}
+.mini-score { font-family: 'Cairo', sans-serif; font-size: 0.82rem; font-weight: 800; }
+.mini-score.good { color: var(--success); }
+.mini-score.warn { color: var(--danger); }
+.report-signature {
+  margin-top: 1rem;
+  border-top: 1.5px dashed rgba(30,95,138,0.2);
+  padding-top: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.signature-box {
+  flex: 1;
+  min-width: 200px;
+  background: #fcfdff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+.signature-title { color: var(--text-3); font-size: 0.78rem; font-weight: 700; }
+.signature-name { color: var(--primary-dark); font-size: 0.95rem; font-weight: 800; margin-top: 0.25rem; }
 
 @media print {
   body { background: #fff; }
   .header, .grade-tabs, .kpi-grid, .charts-row, .overview-card, .subject-filter, .questions-section, .footer, .report-actions { display: none !important; }
   .container { max-width: 100%; padding: 0; }
   .print-report { box-shadow: none; border: 0; border-radius: 0; padding: 0; margin: 0; }
+  .report-body { padding: 1rem 0.9rem 0; }
+  .report-analysis-grid { grid-template-columns: 1fr; }
 }
 
 /* ===================== KPI CARDS ===================== */
@@ -352,6 +503,8 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
   .overview-table { font-size: 0.8rem; }
   .q-header { padding: 1rem; }
   .q-body { padding: 1rem; }
+  .brand-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .report-analysis-grid { grid-template-columns: 1fr; }
 }
 
 /* Hidden class */
@@ -383,6 +536,7 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
   </div>
 
   <!-- GRADE TABS -->
+  <div class="school-selector" id="schoolSelector"><!-- filled by JS --></div>
   <div class="grade-tabs">
     <button class="grade-tab active" onclick="switchGrade('grade6')" id="tab-grade6">
       📚 الصف السادس الابتدائي
@@ -400,24 +554,59 @@ h1,h2,h3,h4,h5 { font-family: 'Cairo', sans-serif; line-height: 1.3; }
 
   <!-- PROFESSIONAL PRINT REPORT -->
   <div class="print-report" id="printReport">
-    <div class="print-head">
-      <div>
-        <div class="print-title">التقرير الاحترافي لنتائج الاختبار التشخيصي</div>
-        <div class="print-sub" id="printReportSub">—</div>
+    <div class="report-brand-banner">
+      <div class="brand-grid">
+        <div class="brand-logo">
+          <img src="testlogo-w.png" alt="شعار وزارة التعليم" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <div class="brand-title-main">وزارة التعليم • الإدارة العامة للتعليم بالمنطقة الشرقية</div>
+          <div class="brand-title-sub">تقرير تشخيصي احترافي لنتائج الاختبارات التحصيلية والدعم العلاجي</div>
+          <span class="brand-chip">🟢 كليشة رسمية معتمدة</span>
+        </div>
+        <div class="brand-chip" id="reportDate">—</div>
       </div>
-      <div class="print-date" id="reportDate">—</div>
     </div>
-    <div class="report-summary-grid" id="reportSummaryGrid"><!-- filled by JS --></div>
-    <table class="report-table">
-      <thead>
-        <tr>
-          <th>المؤشر</th>
-          <th>التفصيل</th>
-          <th>القيمة</th>
-        </tr>
-      </thead>
-      <tbody id="reportHighlightsBody"><!-- filled by JS --></tbody>
-    </table>
+    <div class="report-klisha" id="reportKlisha"><!-- filled by JS --></div>
+    <div class="report-body">
+      <div class="print-head">
+        <div>
+          <div class="print-title">التقرير الاحترافي لنتائج الاختبار التشخيصي</div>
+          <div class="print-sub" id="printReportSub">—</div>
+        </div>
+      </div>
+      <div class="report-summary-grid" id="reportSummaryGrid"><!-- filled by JS --></div>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>المؤشر</th>
+            <th>التفصيل</th>
+            <th>القيمة</th>
+          </tr>
+        </thead>
+        <tbody id="reportHighlightsBody"><!-- filled by JS --></tbody>
+      </table>
+      <div class="report-analysis-grid">
+        <div class="mini-card">
+          <div class="mini-card-title">🔻 البنود الأعلى احتياجاً للدعم</div>
+          <ul class="mini-list" id="hardestQuestionsList"><!-- filled by JS --></ul>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-title">✅ البنود الأعلى إتقاناً</div>
+          <ul class="mini-list" id="easiestQuestionsList"><!-- filled by JS --></ul>
+        </div>
+      </div>
+      <div class="report-signature">
+        <div class="signature-box">
+          <div class="signature-title">إعداد فريق التحليل:</div>
+          <div class="signature-name">وحدة القياس والتقويم المدرسي</div>
+        </div>
+        <div class="signature-box">
+          <div class="signature-title">اعتماد قائد/ـة المدرسة:</div>
+          <div class="signature-name">....................................</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- KPI CARDS -->
@@ -484,6 +673,7 @@ let currentGrade = 'grade6';
 let currentSubject = 'all';
 let histChartObj = null;
 let diffChartObj = null;
+let schoolGradeKeys = [];
 
 function getDiffLevel(pct) {
   if (pct >= 75) return {label: 'سهل', cls: 'easy'};
@@ -519,6 +709,20 @@ function switchGrade(grade) {
   render();
 }
 
+function switchSchool(grade) {
+  switchGrade(grade);
+}
+
+function renderSchoolSelector() {
+  if (!schoolGradeKeys.length) {
+    schoolGradeKeys = Object.keys(ALL_DATA);
+  }
+  document.getElementById('schoolSelector').innerHTML = schoolGradeKeys.map(gradeKey => {
+    const schoolName = ALL_DATA[gradeKey]?.schools?.[0] || ALL_DATA[gradeKey]?.grade || gradeKey;
+    return `<button class="school-card ${currentGrade === gradeKey ? 'active' : ''}" onclick="switchSchool('${gradeKey}')">${schoolName}</button>`;
+  }).join('');
+}
+
 function filterSubject(subj) {
   currentSubject = subj;
   document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
@@ -528,6 +732,7 @@ function filterSubject(subj) {
 }
 
 function render() {
+  renderSchoolSelector();
   renderPrintReport();
   renderKPIs();
   renderCharts();
@@ -547,9 +752,16 @@ function getCurrentData() {
 function renderPrintReport() {
   const { d, questions, avgDiff, hardest, easiest } = getCurrentData();
   const subjectTxt = currentSubject === 'all' ? 'جميع المواد' : getSubjectLabel(currentSubject);
+  const selectedSchool = d.schools[0] || '—';
   const reportDate = new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
   document.getElementById('reportDate').textContent = `تاريخ التقرير: ${reportDate}`;
-  document.getElementById('printReportSub').textContent = `${d.grade} • ${subjectTxt} • إجمالي البنود: ${questions.length}`;
+  document.getElementById('printReportSub').textContent = `${selectedSchool} • ${d.grade} • ${subjectTxt} • إجمالي البنود: ${questions.length}`;
+  document.getElementById('reportKlisha').innerHTML = `
+    <span class="klisha-item">المدرسة:<strong>${selectedSchool}</strong></span>
+    <span class="klisha-item">القطاع:<strong>${d.sectors[0] || '—'}</strong></span>
+    <span class="klisha-item">الفئة:<strong>${d.school_types[0] || '—'}</strong></span>
+    <span class="klisha-item">الصف الدراسي:<strong>${d.grade}</strong></span>
+  `;
 
   document.getElementById('reportSummaryGrid').innerHTML = `
     <div class="report-summary-item">
@@ -587,6 +799,26 @@ function renderPrintReport() {
       <td>${getDiffLevel(avgDiff).label}</td>
     </tr>
   `;
+
+  const topHard = [...questions].sort((a, b) => a.difficulty - b.difficulty).slice(0, 5);
+  const topEasy = [...questions].sort((a, b) => b.difficulty - a.difficulty).slice(0, 5);
+  const questionLabel = (q) => (q.is_named ? (q.question.length > 42 ? q.question.slice(0, 42) + '…' : q.question) : `سؤال ${q.index}`);
+
+  document.getElementById('hardestQuestionsList').innerHTML = topHard.map(q => `
+    <li>
+      <span class="mini-badge">${q.index}</span>
+      <span>${questionLabel(q)}</span>
+      <span class="mini-score warn">${q.difficulty}%</span>
+    </li>
+  `).join('');
+
+  document.getElementById('easiestQuestionsList').innerHTML = topEasy.map(q => `
+    <li>
+      <span class="mini-badge">${q.index}</span>
+      <span>${questionLabel(q)}</span>
+      <span class="mini-score good">${q.difficulty}%</span>
+    </li>
+  `).join('');
 }
 
 function printProfessionalReport() {
@@ -603,9 +835,10 @@ async function exportReportPDF(event) {
     renderPrintReport();
     const { d } = getCurrentData();
     const element = document.getElementById('printReport');
+    const schoolLabel = (d.schools[0] || d.grade || 'school').replace(/\s+/g, '-');
     const options = {
       margin: [8, 8, 8, 8],
-      filename: `تقرير-تشخيصي-${d.grade}.pdf`,
+      filename: `تقرير-تشخيصي-${schoolLabel}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -649,6 +882,13 @@ function renderKPIs() {
   `).join('');
   
   // Header stats
+  const subtitleSchool = d.schools[0] || d.grade;
+  document.querySelector('.header-subtitle').textContent = `${subtitleSchool} • ${d.sectors[0] || '—'}`;
+  document.querySelector('.header-badges').innerHTML = `
+    <span class="header-badge">🏫 ${d.grade}</span>
+    <span class="header-badge">🏫 ${subtitleSchool}</span>
+    <span class="header-badge">📍 ${d.sectors[0] || '—'}</span>
+  `;
   document.getElementById('headerStats').innerHTML = `
     <div class="header-stat">
       <div class="header-stat-val">${d.total_students}</div>
