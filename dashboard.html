@@ -6,7 +6,6 @@
 <title>لوحة تحليل الاختبارات التشخيصية - الصف السادس والثالث المتوسط</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root {
@@ -849,38 +848,20 @@ function renderPrintReport() {
     }).join('')}`).join('');
 }
 
-function printProfessionalReport() {
-  if (!currentData) { alert('يرجى رفع ملف Excel أولاً لتحليل بيانات المدرسة'); return; }
-  renderPrintReport();
-  window.print();
-}
+function printProfessionalReport() { triggerPrint(null); }
+function headerExportPDF(event) { triggerPrint(event?.currentTarget); }
+function exportReportPDF(event) { triggerPrint(event?.currentTarget); }
 
-function headerExportPDF(event) {
+function triggerPrint(btn) {
   if (!currentData) { alert('يرجى رفع ملف Excel أولاً لتحليل بيانات المدرسة'); return; }
-  exportReportPDF(event);
-}
-
-async function exportReportPDF(event) {
-  const btn = event?.currentTarget;
   const origHTML = btn?.innerHTML;
-  if (btn) { btn.disabled=true; btn.innerHTML='⏳ جاري تجهيز ملف PDF...'; }
-  try {
-    document.body.classList.add('pdf-export');
-    renderPrintReport();
-    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-    await html2pdf().set({
-      margin:[8,8,8,8],
-      filename:`تقرير-تشخيصي-${(currentData.schools[0]||currentData.grade||'school').replace(/\s+/g,'-')}.pdf`,
-      image:{type:'jpeg',quality:0.98},
-      html2canvas:{scale:2,useCORS:true},
-      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-    }).from(document.getElementById('printReport')).save();
-  } catch(e) {
-    alert('تعذر إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
-  } finally {
-    document.body.classList.remove('pdf-export');
-    if (btn) { btn.disabled=false; btn.innerHTML=origHTML||'📄 تصدير PDF / طباعة'; }
-  }
+  if (btn) { btn.disabled=true; btn.innerHTML='⏳ جاري التجهيز...'; }
+  renderPrintReport();
+  window.addEventListener('afterprint', function handler() {
+    window.removeEventListener('afterprint', handler);
+    if (btn) { btn.disabled=false; btn.innerHTML=origHTML; }
+  }, {once:true});
+  window.print();
 }
 
 function renderKPIs() {
